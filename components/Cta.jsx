@@ -10,6 +10,7 @@ export default function Cta({ type, text, icon, href, onClick }) {
     // le contenu du cta
     const CTAContent = () => {
         return (
+            // La balise <></> est rien, il permet simplement d'englober du contenu afin d'éviter les erreurs
             <>
                 <div className="cta-text">{ text }</div>
                 {

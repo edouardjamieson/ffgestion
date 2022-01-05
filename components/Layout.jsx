@@ -11,12 +11,18 @@ export default function Layout({ children, title, hasButton, buttonLabel, button
                     <div className="hero-separator"></div>
                     {
                         hasButton ?
-                        <Cta type="button" text={buttonLabel} icon={buttonFontAwesomeClass} onClick={() => onButtonClick ? onButtonClick() : null} /> : null
+                        <Cta
+                            type="button"
+                            text={buttonLabel}
+                            icon={buttonFontAwesomeClass}
+                            onClick={() => onButtonClick ? onButtonClick() : null}
+                        /> : null
                     }
 
                 </div> : null
             }
 
+            {/* children est les elements que nous passons dans notre component <Exemple> CONTENU À PASSER </Exemple> */}
             { children }
         </div>
     )

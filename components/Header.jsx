@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 export default function Header({ isUserAdmin }) {
 
     // Définition de l'objet router
+    // Le router est ce qui nous permet de naviguer dans le site
     const router = useRouter()
 
     return (
@@ -12,7 +13,9 @@ export default function Header({ isUserAdmin }) {
             {/* Navigation */}
             <nav className="main-header_navigation">
                 <ul>
+                    {/* router.asPath nous retourne l'url courante */}
                     <li className={router.asPath === "/" ? "active" : ""}>
+                        {/* le <Link> est une balise qui permet de naviguer, on lui passe un href */}
                         <Link href="/">
                             <a>Aujourd'hui</a>
                         </Link>

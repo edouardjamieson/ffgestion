@@ -1,0 +1,154 @@
+@import (less) "_variables.less";
+*[safe-area="top"] { padding-top: env(safe-area-inset-top); }
+*[safe-area="bottom"] { padding-bottom: env(safe-area-inset-bottom); }
+*[safe-area="both"] { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+
+html.is-pwa *:not(.selectable) { -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+html.is-pwa body { width:100%; height: 100vh!important; }
+html.is-pwa footer { width: 100%; position: fixed; bottom: 0; }
+html.is-pwa header { width: 100%; }
+
+.pwa-app {
+    width: 100%;
+    height: 100%;    
+    display: flex;
+    flex-direction: column;
+}
+
+.pwa-wrapper {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+}
+
+.pwa-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    > main {
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: none;
+        height: 100%;
+        max-height: 100%;
+        width: 100%;
+    }
+}
+
+/***
+ *    ########  ########     ###    ##    ## ########      ######   ##     ## #### ########  ######## 
+ *    ##     ## ##     ##   ## ##   ###   ## ##     ##    ##    ##  ##     ##  ##  ##     ## ##       
+ *    ##     ## ##     ##  ##   ##  ####  ## ##     ##    ##        ##     ##  ##  ##     ## ##       
+ *    ########  ########  ##     ## ## ## ## ##     ##    ##   #### ##     ##  ##  ##     ## ######   
+ *    ##     ## ##   ##   ######### ##  #### ##     ##    ##    ##  ##     ##  ##  ##     ## ##       
+ *    ##     ## ##    ##  ##     ## ##   ### ##     ##    ##    ##  ##     ##  ##  ##     ## ##       
+ *    ########  ##     ## ##     ## ##    ## ########      ######    #######  #### ########  ######## 
+ */
+
+.brand-guide_outils-pwa {
+    display: flex;
+    flex-direction: column;
+
+    h3 { margin-top: 1rem; margin-bottom: 0.5rem; }
+    .pwa-compat {
+        display: flex;
+        margin-bottom: 0.5rem;
+        i { font-style: normal; color: #fff; font-weight: bold; font-size: 0.8rem; padding: 0.2rem 0.5rem; border-radius: 100px; &:nth-child(1) {margin-right: 0.5rem;} }
+        i.android { background-color: #3ddc84; }
+        i.ios { background-color: #006CFF; }
+    }
+}
+
+/***
+ *    ########    ###    ########     ########     ###    ########  
+ *       ##      ## ##   ##     ##    ##     ##   ## ##   ##     ## 
+ *       ##     ##   ##  ##     ##    ##     ##  ##   ##  ##     ## 
+ *       ##    ##     ## ########     ########  ##     ## ########  
+ *       ##    ######### ##     ##    ##     ## ######### ##   ##   
+ *       ##    ##     ## ##     ##    ##     ## ##     ## ##    ##  
+ *       ##    ##     ## ########     ########  ##     ## ##     ## 
+ */
+.pwa-tab_navigation {
+    width: 100%;
+    background-color: @color_lightgray;
+    border-top: 1px solid @color_gray;
+    position: fixed;
+    bottom: 0;
+    ul.menu {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        width: 100%;
+        padding: 1rem 0;
+    }
+}
+
+/***
+ *    ########   #######  ##      ## ##    ## ##        #######     ###    ########     ########   #######  ########  ##     ## ########  
+ *    ##     ## ##     ## ##  ##  ## ###   ## ##       ##     ##   ## ##   ##     ##    ##     ## ##     ## ##     ## ##     ## ##     ## 
+ *    ##     ## ##     ## ##  ##  ## ####  ## ##       ##     ##  ##   ##  ##     ##    ##     ## ##     ## ##     ## ##     ## ##     ## 
+ *    ##     ## ##     ## ##  ##  ## ## ## ## ##       ##     ## ##     ## ##     ##    ########  ##     ## ########  ##     ## ########  
+ *    ##     ## ##     ## ##  ##  ## ##  #### ##       ##     ## ######### ##     ##    ##        ##     ## ##        ##     ## ##        
+ *    ##     ## ##     ## ##  ##  ## ##   ### ##       ##     ## ##     ## ##     ##    ##        ##     ## ##        ##     ## ##        
+ *    ########   #######   ###  ###  ##    ## ########  #######  ##     ## ########     ##         #######  ##         #######  ##        
+ */
+#download-toast {
+    position: fixed; width: 100%; bottom: 0; background-color: lightgray; padding: 0.5rem; display: none; align-items: center; flex-wrap: wrap; border-top: 1px solid gray;
+    .app-icon { width: 15%; aspect-ratio: 1/1; border-radius: 15px; }
+    .content { display: flex; flex-direction: column; width: 83%; margin-left: auto; position: relative; padding-right: 1rem; }
+    span[data-popup_title] { font-weight: 700; }
+    p[data-popup_body] {
+        img.share-btn { width: 1.2rem; height: 1.2rem; margin: 0 0.1rem; vertical-align: middle; }
+    }
+    i[data-popup_close] { position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
+    button[data-popup_install] { width: 100%; background-color: royalblue; color: #fff; align-items: center; justify-content: center; padding: 0.5rem 0; border:none; border-radius: 10px; margin-top: 0.5rem; font-weight: 700; }
+}
+
+/***
+ *     #######  ##    ##       ##  #######  ######## ######## ##       #### ##    ## ######## 
+ *    ##     ## ###   ##      ##  ##     ## ##       ##       ##        ##  ###   ## ##       
+ *    ##     ## ####  ##     ##   ##     ## ##       ##       ##        ##  ####  ## ##       
+ *    ##     ## ## ## ##    ##    ##     ## ######   ######   ##        ##  ## ## ## ######   
+ *    ##     ## ##  ####   ##     ##     ## ##       ##       ##        ##  ##  #### ##       
+ *    ##     ## ##   ###  ##      ##     ## ##       ##       ##        ##  ##   ### ##       
+ *     #######  ##    ## ##        #######  ##       ##       ######## #### ##    ## ######## 
+ */
+#connexion-toast {
+    position: fixed; width: 100%; height: 100vh; padding: 1rem; display: none; flex-direction: column; align-items: center; justify-content: center; background-color: rgba(255,255,255,0.8); color: #000;
+    span[data-popup_title] { font-weight: 700; font-size: 1.5rem; }
+    p[data-popup_body] { text-align: center; font-size: 1.2rem; }
+    &.online > span[data-popup_title] { color: limegreen; }
+    &.offline > span[data-popup_title] { color: orangered; }
+}
+
+/***
+ *    ########  ##     ## ##       ##           #######     ########  ######## ######## ########  ########  ######  ##     ## 
+ *    ##     ## ##     ## ##       ##          ##     ##    ##     ## ##       ##       ##     ## ##       ##    ## ##     ## 
+ *    ##     ## ##     ## ##       ##                 ##    ##     ## ##       ##       ##     ## ##       ##       ##     ## 
+ *    ########  ##     ## ##       ##           #######     ########  ######   ######   ########  ######    ######  ######### 
+ *    ##        ##     ## ##       ##          ##           ##   ##   ##       ##       ##   ##   ##             ## ##     ## 
+ *    ##        ##     ## ##       ##          ##           ##    ##  ##       ##       ##    ##  ##       ##    ## ##     ## 
+ *    ##         #######  ######## ########    #########    ##     ## ######## ##       ##     ## ########  ######  ##     ## 
+ */
+.pull-to-refresh {
+    width: 100%;
+    background: lightgray;
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.pull-to-refresh_loader {
+    width: 5%;
+    opacity: 0;
+
+    &.loader-animate {
+        animation: P2RLoaderAnimate 1s infinite linear;
+    }
+}
+@keyframes P2RLoaderAnimate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

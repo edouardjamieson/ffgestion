@@ -1,0 +1,95 @@
+// ========================================================
+// Couleurs
+// ========================================================
+@color_white  : #fff;
+@color_black  : #000;
+@color_red    : #ac1010;
+@color_primary: @color_red;
+@color_warning: yellow;
+@color_error  : red;
+@color_success: green;
+@color_lightgray: #ebebeb;
+@color_gray: #d4d4d4;
+
+// ========================================================
+// Polices
+// ========================================================
+@font_title: 'Open Sans', sans-serif;
+@font_text : 'Roboto Slab', serif;
+
+// ========================================================
+// Font Weights
+// ========================================================
+@fw_thin       : 100;
+@fw_extralight : 200;
+@fw_light      : 300;
+@fw_regular    : 400;
+@fw_medium     : 500;
+@fw_semibold   : 600;
+@fw_bold       : 700;
+@fw_extrabold  : 800;
+@fw_black      : 900;
+
+// ========================================================
+// Bases de pixels par format (REM proportionnel)
+// ========================================================
+@px_desktop         : 18;
+@px_landscape_tablet: 16;
+@px_portrait_tablet : 14;
+@px_phone           : 14;
+
+// ========================================================
+// Variables calculées en JavaScript
+// ========================================================
+:root{
+  --vh: 1vh; // Variable d'unité d'un "vh" qui va être calculée en JavaScript pour les mobiles selon le viewport sans les barres de navigation
+  --root_font_size_prop: 1; // Variable du font-size du HTML et la variable CSS de proportion 
+}
+
+// ========================================================
+// Easings
+// ========================================================
+@ease_out_sine    : cubic-bezier(0.39, 0.575, 0.565, 1);
+@ease_out_quad    : cubic-bezier(0.25, 0.46, 0.45, 0.94);
+@ease_out_cubic   : cubic-bezier(0.215, 0.61, 0.355, 1);
+@ease_out_quart   : cubic-bezier(0.25, 1, 0.5, 1);
+@ease_out_quint   : cubic-bezier(0.22, 1, 0.36, 1);
+@ease_out_expo    : cubic-bezier(0.19, 1, 0.22, 1);
+@ease_out_circ    : cubic-bezier(0, 0.55, 0.45, 1);
+@ease_out_back    : cubic-bezier(0.175, 0.885, 0.32, 1.275);
+@ease_in_sine     : cubic-bezier(0.47, 0, 0.745, 0.715);
+@ease_in_quad     : cubic-bezier(0.55, 0.085, 0.68, 0.53);
+@ease_in_cubic    : cubic-bezier(0.55, 0.055, 0.675, 0.19);
+@ease_in_quart    : cubic-bezier(0.5, 0, 0.75, 0);
+@ease_in_quint    : cubic-bezier(0.64, 0, 0.78, 0);
+@ease_in_expo     : cubic-bezier(0.95, 0.05, 0.795, 0.035);
+@ease_in_circ     : cubic-bezier(0.55, 0, 1, 0.45);
+@ease_in_back     : cubic-bezier(0.6, -0.28, 0.735, 0.045);
+@ease_in_out_sine : cubic-bezier(0.445, 0.05, 0.55, 0.95);
+@ease_in_out_quad : cubic-bezier(0.455, 0.03, 0.515, 0.955);
+@ease_in_out_cubic: cubic-bezier(0.645, 0.045, 0.355, 1);
+@ease_in_out_quart: cubic-bezier(0.76, 0, 0.24, 1);
+@ease_in_out_quint: cubic-bezier(0.83, 0, 0.17, 1);
+@ease_in_out_expo : cubic-bezier(1, 0, 0, 1);
+@ease_in_out_circ : cubic-bezier(0.85, 0, 0.15, 1);
+
+// ========================================================
+// Variables relatives aux éléments de Wordpress
+// ========================================================
+:root{ --wp_admin_bar_height: 32px; }
+@media screen and (max-width: 782px) {
+  :root{ --wp_admin_bar_height: 46px; }
+}
+
+// ========================================================
+// Media Queries
+// ========================================================
+@mq_large_desktop_only      : ~"screen and (min-width: 2100px)";
+@mq_desktop_only            : ~"screen and (min-width: 1200px)";
+@mq_tablet_and_down         : ~"screen and (max-width: 1199px)";
+@mq_tablet_only             : ~"screen and (max-width: 1199px) and (min-width: 750px)";
+@mq_landscape_tablet_only   : ~"screen and (max-width: 1199px) and (min-width: 750px) and (orientation: landscape)";
+@mq_portrait_tablet_and_down: ~"screen and (max-width: 1199px) and (orientation: portrait), screen and (max-width: 749px)";
+@mq_portrait_tablet_only    : ~"screen and (max-width: 1199px) and (orientation: portrait) and (min-width: 750px)";
+@mq_phone_only              : ~"screen and (max-width: 749px)";
+@mq_landscape_phone_only    : ~"screen and (max-width: 749px) and (orientation: landscape)";

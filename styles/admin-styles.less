@@ -1,0 +1,214 @@
+@import (less) "_variables.less";
+@import (less) "_fonts.less";
+@import (less) "_mixins.less";
+
+/***
+*     ######   ######## ##    ## ######## ########     ###    ##       
+*    ##    ##  ##       ###   ## ##       ##     ##   ## ##   ##       
+*    ##        ##       ####  ## ##       ##     ##  ##   ##  ##       
+*    ##   #### ######   ## ## ## ######   ########  ##     ## ##       
+*    ##    ##  ##       ##  #### ##       ##   ##   ######### ##       
+*    ##    ##  ##       ##   ### ##       ##    ##  ##     ## ##       
+*     ######   ######## ##    ## ######## ##     ## ##     ## ######## 
+*/
+
+// ========================================================
+// WPML - Cacher les boutons de traduction automatique de WPML
+// ========================================================
+.icl_box_paragraph > p:first-child { display: none!important; }
+#icl_translations_table { display: block!important; }
+
+.otgs-toggle-group,
+.otgs-switcher,
+#icl_cfo,
+#icl_cfo + .otgs-ico-help,
+#icl_set_duplicate,
+#icl_set_duplicate + span,
+#icl_set_duplicate + span + .otgs-ico-help { display: none!important; }
+
+// =====================================================================================
+// WYSIWYGs
+// =====================================================================================
+.wysiwyg,
+.wysiwyg * { position: relative; box-sizing: border-box; }
+.wysiwyg {
+  p { font-size: 1rem!important; line-height: 1.4em!important; } // Reset_backend
+  @import (less) "_general.less";
+  @import (less) "_wysiwyg.less";
+}
+
+// =====================================================================================
+// SIDEBAR
+// =====================================================================================
+#adminmenu, #adminmenu .wp-submenu, #adminmenuback, #adminmenuwrap { width: 200px; white-space: nowrap; }
+#adminmenu .wp-menu-open .wp-submenu { white-space: normal; }
+#wpcontent, #wpfooter { margin-left: 200px; }
+#adminmenu .opensub .wp-submenu { left:100%; }
+
+// =====================================================================================
+// PROFIL
+// =====================================================================================
+.user-rich-editing-wrap { display: none; }
+.user-syntax-highlighting-wrap { display: none; }
+.user-comment-shortcuts-wrap { display: none; }
+
+// =====================================================================================
+// CACHE LES INDÉSIRABLES
+// =====================================================================================
+#wp-admin-bar-customize { display: none; }
+#wp-admin-bar-comments { display: none; }
+#wp-admin-bar-new-content { display: none; }
+#icl_how_to_translate_link { display: none; }
+#preview-action { display: none; }
+.misc-pub-visibility { display: none; }
+.hide-if-no-customize { display: none; }
+#redux_dashboard_widget { display: none; }
+
+// =====================================================================================
+// SIMPLIFIE LA GESTION DES MENUS
+// =====================================================================================
+.nav-menus-php .nav-tab-wrapper { display: none; }
+.nav-menus-php #wpml-ls-menu-management { display: none !important; }
+.nav-menus-php #add-post-type-post { display: none; }
+.nav-menus-php #add-category { display: none; }
+.nav-menus-php #add-post_tag { display: none; }
+.nav-menus-php #nav-menu-header .major-publishing-actions br { display: none; }
+.nav-menus-php #nav-menu-header .major-publishing-actions .publishing-action { display: none; }
+.nav-menus-php #posttype-page-tabs { margin-bottom: -6px; }
+.nav-menus-php #posttype-page-tabs li { display: inline-block; }
+.customlinkdiv label { float: none; }
+.customlinkdiv input[type=text] { width: 100%; }
+
+// =====================================================================================
+// MENU D'ADMINISTRATION DE WORDPRESS
+// =====================================================================================
+.wp-menu-separator--line { border-bottom: 1px solid rgba(255, 255, 255, 0.2); height: 6px !important; }
+
+// =====================================================================================
+// GROUPES DE CHAMPS ACF (PAGE DE CONFIGURATION)
+// =====================================================================================
+.type-acf-field-group.sync-available .column-title .row-title { color: fade(#000, 30%); pointer-events: none; }
+.type-acf-field-group.sync-available .column-title .row-title::after { content: "*Avant de pouvoir modifier ce groupe de champs, il faut d'abord le synchroniser."; display: block; margin-top: 4px; font-size: 0.75em; font-weight: 400; color: fade(#000, 50%) }
+.type-acf-field-group.sync-available .column-title .row-actions { display: none; }
+.type-acf-field-group.sync-available .column-acf-json .sync { display: none; }
+
+// Paramètre personalisé 'language_synchronization'
+.acf-field-setting-sub_fields .acf-field-setting-language_synchronization,
+.acf-field-setting-fc_layout .acf-field-setting-language_synchronization { display: none !important; }
+
+.language-sync-field-notice { margin-top: 4px; margin-bottom: 0 !important; }
+.acf-field-flexible-content .language-sync-field-notice,
+.acf-field-repeater .acf-repeater:not(.-empty) + .language-sync-field-notice { margin-top: -32px; }
+
+// =====================================================================================
+// ACF GALLERY
+// =====================================================================================
+.acf-gallery .acf-gallery-attachment .thumbnail img { max-width: 90%; }
+
+// =====================================================================================
+// ACF REPEATER
+// =====================================================================================
+.acf-repeater tr td { border-top: 1px solid #222!important; }
+.acf-repeater tr:nth-child(2n) td { background-color: #f9f9f9; }
+.acf-repeater.-empty:after { content: "Aucun élément n\'a été ajouté."; display: block; position: relative; background-color: #fff; border: 1px solid #ddd; line-height: 45px; white-space: nowrap; width: 100%; box-sizing: border-box; margin-top: -37px; padding-left: 20px; z-index: -1; }
+.acf-repeater.-empty .acf-actions { z-index: 2; margin-right: 10px; }
+
+// =====================================================================================
+// ACF TABS
+// =====================================================================================
+.acf-tab-group { padding: 0; }
+
+// =====================================================================================
+// WOOCOMMERCE
+// =====================================================================================
+#adminmenu #menu-posts-product .menu-icon-post div.wp-menu-image::before, #adminmenu #menu-posts-product .menu-icon-product div.wp-menu-image.dashicons-before::before { content: "\f480"!important; font-family: dashicons!important; }
+
+// ===============================================
+// Recaptcha
+// ===============================================
+.grecaptcha-badge { left:-9000px!important; }
+
+// ===============================================
+// Bulk Action de synchroniser des ACF
+// ===============================================
+option[value=acfsync] { 
+  display: none;
+}
+
+/***
+*    ##      ## #### ########   ######   ######## ########  ######  
+*    ##  ##  ##  ##  ##     ## ##    ##  ##          ##    ##    ## 
+*    ##  ##  ##  ##  ##     ## ##        ##          ##    ##       
+*    ##  ##  ##  ##  ##     ## ##   #### ######      ##     ######  
+*    ##  ##  ##  ##  ##     ## ##    ##  ##          ##          ## 
+*    ##  ##  ##  ##  ##     ## ##    ##  ##          ##    ##    ## 
+*     ###  ###  #### ########   ######   ########    ##     ######  
+*/
+// =====================================================================================
+// WIDGET "VUE D'ENSEMBLE"
+// =====================================================================================
+#ff_widget_overview .post-type { border-bottom: 1px solid #eee; padding: 0.5rem 0; }
+#ff_widget_overview .post-type:last-child { border-bottom: none; }
+#ff_widget_overview .post-type > div:nth-child(2) { float: right; }
+#ff_widget_overview .post-type > div p { padding-left: 10px; font-size: 0.7rem; display: inline-block; margin:0;}
+#ff_widget_overview .post-type > div.erreur,
+#ff_widget_overview .post-type > div.erreur a { color:red; }
+#ff_widget_overview .post-type > span.dashicons-clipboard:before { margin-right:5px; }
+.post-type .dashicons, .dashicons-before:before { margin-right: 5px; }
+
+// =====================================================================================
+// WIDGET "ACTIVITÉ RÉCENTE"
+// =====================================================================================
+#ff_widget_activity .activite { margin: 0.75rem 0; }
+
+// =====================================================================================
+// TABLEAUX/LISTES
+// =====================================================================================
+.wp-list-table #last_login { width: 150px; }
+.wp-list-table #modification { width: 200px; }
+.wp-list-table #icl_translations { width: 30px; }
+
+/***
+*     ######   #######  ##        #######  ##    ## ##    ## ########  ######  
+*    ##    ## ##     ## ##       ##     ## ###   ## ###   ## ##       ##    ## 
+*    ##       ##     ## ##       ##     ## ####  ## ####  ## ##       ##       
+*    ##       ##     ## ##       ##     ## ## ## ## ## ## ## ######    ######  
+*    ##       ##     ## ##       ##     ## ##  #### ##  #### ##             ## 
+*    ##    ## ##     ## ##       ##     ## ##   ### ##   ### ##       ##    ## 
+*     ######   #######  ########  #######  ##    ## ##    ## ########  ######  
+*/
+
+// =====================================================================================
+// Tables
+// =====================================================================================
+table.pages,
+table.posts { table-layout: auto; }
+
+// =====================================================================================
+// Visibilité
+// =====================================================================================
+td.visibilite.column-visibilite { width: 50px; }
+.icon-checkbox { display: none!important; }
+.icon-checkbox:disabled,
+.icon-checkbox:disabled ~ span { opacity: 0.25; pointer-events: none!important; cursor: default; }
+.icon-checkbox + span { position: relative; width:1.5rem; height:1.5rem; display:inline-block; vertical-align: middle; }
+.icon-checkbox + span i { color: #555; font-size: 1.15rem; opacity:0.25; vertical-align: middle; }
+.icon-checkbox + span i.fa-eye-slash { opacity: 1; }
+.icon-checkbox + span:hover i { opacity: 1; }
+.icon-checkbox + span .fa-check { color:green; opacity:1; }
+.icon-checkbox + span .red { color:red; }
+.icon-checkbox + span .green { color:green; }
+.icon-checkbox + span .flip { .rotate(180deg); transform-origin: center; }
+.icon-checkbox:checked + span .hide-if-checked { display: none; }
+.icon-checkbox:not(:checked) + span .show-if-checked { display: none; }
+
+/***
+*    ##     ##  ######  ######## ########   ######  
+*    ##     ## ##    ## ##       ##     ## ##    ## 
+*    ##     ## ##       ##       ##     ## ##       
+*    ##     ##  ######  ######   ########   ######  
+*    ##     ##       ## ##       ##   ##         ## 
+*    ##     ## ##    ## ##       ##    ##  ##    ## 
+*     #######   ######  ######## ##     ##  ######  
+*/
+tr.pw-weak + tr { display: none!important; } //  Cacher la case à cocher "Envoyer un courriel à la personne à propos de son compte." dans le formulaire de création de compte

@@ -1,0 +1,182 @@
+@import (less) "_fonts.less";
+@import (less) "_variables.less";
+@import (less) "_mixins.less";
+@import (less) "_reset.less";
+@import (less) "_general.less";
+
+/***
+*     ######   ######## ##    ## ######## ########     ###    ##       
+*    ##    ##  ##       ###   ## ##       ##     ##   ## ##   ##       
+*    ##        ##       ####  ## ##       ##     ##  ##   ##  ##       
+*    ##   #### ######   ## ## ## ######   ########  ##     ## ##       
+*    ##    ##  ##       ##  #### ##       ##   ##   ######### ##       
+*    ##    ##  ##       ##   ### ##       ##    ##  ##     ## ##       
+*     ######   ######## ##    ## ######## ##     ## ##     ## ######## 
+*/
+html { color: @color_black; font-family: @font_text; } 
+body { -webkit-text-size-adjust: 100%; }
+
+// ==================================================================================================
+// MQ: Téléphone paysage seulement
+// ==================================================================================================
+@media @mq_landscape_phone_only {
+  body, html { overflow: hidden; }
+  #overlay-wrong-orientation { display: block; }
+}
+
+
+/***
+*    ##     ## ######## #### ##        ######  
+*    ##     ##    ##     ##  ##       ##    ## 
+*    ##     ##    ##     ##  ##       ##       
+*    ##     ##    ##     ##  ##        ######  
+*    ##     ##    ##     ##  ##             ## 
+*    ##     ##    ##     ##  ##       ##    ## 
+*     #######     ##    #### ########  ######  
+*/
+.valign { height: 100%; width: 100%; display: table; }
+.valign > div { display: table-cell; vertical-align: middle; }
+.valign > div > *:nth-child(1) { margin-top: 0 !important; } 
+.valign > div > *:last-child { margin-bottom: 0 !important; }
+
+.centre { margin-left: auto; margin-right: auto; width: 80%; }
+
+
+/***
+*     ######   #######  ##     ## ########   #######   ######     ###    ##    ## ######## ########  ######  
+*    ##    ## ##     ## ###   ### ##     ## ##     ## ##    ##   ## ##   ###   ##    ##    ##       ##    ## 
+*    ##       ##     ## #### #### ##     ## ##     ## ##        ##   ##  ####  ##    ##    ##       ##       
+*    ##       ##     ## ## ### ## ########  ##     ##  ######  ##     ## ## ## ##    ##    ######    ######  
+*    ##       ##     ## ##     ## ##        ##     ##       ## ######### ##  ####    ##    ##             ## 
+*    ##    ## ##     ## ##     ## ##        ##     ## ##    ## ##     ## ##   ###    ##    ##       ##    ## 
+*     ######   #######  ##     ## ##         #######   ######  ##     ## ##    ##    ##    ########  ######  
+*/
+/***
+*      ####  #    # ###### #####  #        ##   #   # 
+*     #    # #    # #      #    # #       #  #   # #  
+*     #    # #    # #####  #    # #      #    #   #   
+*     #    # #    # #      #####  #      ######   #   
+*      ####    ##   ###### #    # ###### #    #   #   
+*/
+#overlay { position: fixed; top: 0; left: 0; background-color: rgba(0,0,0,0.35); width: 100%; height: 100vh; text-align: center; z-index: 100; }
+#overlay.hidden { display: none; }
+#overlay > div { display: inline-block; .vertical-align; background-color: white; padding: 2rem; }
+#overlay > div h3 { color: @color_black; margin-bottom: 0.5rem; }
+#overlay .message > *:first-child { margin-top: 0; }
+#overlay .fermer-overlay { position: absolute; top: 0.5rem; right: 0.5rem; cursor: pointer; z-index: 101; }
+#overlay .fermer-overlay:hover i { color: @color_black; }
+#overlay .fa-check-circle { font-size: 3rem; color: #32CD32; margin-bottom: 1rem; }
+
+#overlay-wrong-orientation { position: fixed; top: 0; left: 0; display: none; width: 100%; height: 100vh; text-align: center; background-color: rgba(0,0,0,0.7); z-index: 100; }
+#overlay-wrong-orientation > div { position: absolute; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 100%; color: @color_white; }
+#overlay-wrong-orientation > div p { margin-top: 0.5rem; }
+
+/***
+*     ######  ####  #####  #    # 
+*     #      #    # #    # ##  ## 
+*     #####  #    # #    # # ## # 
+*     #      #    # #####  #    # 
+*     #       ####  #    # #    # 
+*/
+// Label
+.form__label { width: 100%; display: block; }
+
+// Champs
+select,
+input[type="number"],
+input[type="password"],
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+textarea { border: 1px solid lighten(@color_black,70%); padding: 0.7rem; font-family: @font_text; font-size: 1rem; }
+textarea { resize: none; }
+
+select {.select-arrow(@color_black); }
+
+// Champs de type "file"
+.file-input-visual + input[type="file"] { display: none; }
+.file-input-visual { display: inline-block; padding: 0.65em; font-size: 0.9rem; color: @color_white; background-color: @color_black; cursor: pointer; }
+
+// Radio/Checkbox
+input[type="radio"],
+input[type="checkbox"] { display: none; }
+
+input[type="radio"] + span,
+input[type="checkbox"] + span { width: auto; display: inline-block; font-size: 1rem; padding-left:1rem; margin-right: 1rem; vertical-align: middle; cursor: pointer!important;  }
+
+input[type="radio"] + span:last-child,
+input[type="checkbox"] + span:last-child { margin: 0; }
+
+input[type="radio"] + span:before { border-radius: 50%; }
+
+// Before
+input[type="radio"] + span:before,
+input[type="checkbox"] + span:before { content: ''; position: absolute; top: 0; left: 0; box-sizing: border-box; padding: 3/18rem 3/18rem 3/18rem 2/18rem; width: 0.85rem; height: 0.85rem; display: inline-block; background-color: @color_white; border: 1px solid #000; }
+
+// Checked
+input[type="checkbox"]:checked + span:before,
+input[type="radio"]:checked + span:before { content: '\f00c'; font-family: 'Font Awesome 5 Free'; font-weight: bold; font-size: 0.6rem; color: @color_black; line-height: 1; }
+input[type="checkbox"]:checked + span,
+input[type="radio"]:checked + span{ color: @color_black; font-weight: bold; }
+
+// Si erreur
+.mce-tinymce.erreur,
+.selectric-wrapper.erreur,
+select.erreur,
+input[type="number"].erreur,
+input[type="password"].erreur,
+input[type="text"].erreur,
+input[type="email"].erreur,
+input[type="tel"].erreur,
+input[type="radio"].erreur + span:before,
+input[type="checkbox"].erreur + span:before,
+textarea.erreur { border: 1px solid @color_red; }
+.form__label.erreur,
+input[type="radio"].erreur + span,
+input[type="checkbox"].erreur + span { color: @color_red; }
+
+// Chargement
+form.loading { cursor: progress; }
+form.loading * { user-select: none; }
+form.loading > * { opacity: 0.5; pointer-events: none; }
+
+// Espacer les rangés
+form .ff-cols > *[class*="c-"] { margin-bottom:1rem; }
+
+// Les champs à width:100% quand ils sont directement dans une colonne
+form .ff-cols > *[class*="c-"] {
+  > select,
+  > input[type="number"],
+  > input[type="password"],
+  > input[type="text"],
+  > input[type="email"],
+  > input[type="tel"],
+  > textarea { width: 100%; }
+}
+
+@media @mq_phone_only{
+  select,
+  input[type="number"],
+  input[type="password"],
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  textarea {font-size: 16px!important; }
+}
+
+// Retirer les styles d'erreur de Firefox
+select:invalid,
+input:invalid,
+textarea:invalid { box-shadow: none!important; }
+
+/***
+*    ##     ## ########    ###    ########  ######## ########  
+*    ##     ## ##         ## ##   ##     ## ##       ##     ## 
+*    ##     ## ##        ##   ##  ##     ## ##       ##     ## 
+*    ######### ######   ##     ## ##     ## ######   ########  
+*    ##     ## ##       ######### ##     ## ##       ##   ##   
+*    ##     ## ##       ##     ## ##     ## ##       ##    ##  
+*    ##     ## ######## ##     ## ########  ######## ##     ## 
+*/
+header { display: flex; justify-content: space-between; align-items: center; padding: 2rem; background-color: #eee; }
+header ul { margin-top: 0; padding-left: 0; }

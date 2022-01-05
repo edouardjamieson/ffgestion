@@ -50,6 +50,22 @@
   font-display: swap;
   src: url(https://fonts.gstatic.com/s/robotoslab/v16/BngbUXZYTXPIvIBgJJSb6s3BzlRRfKOFbvjoa4OWaA.ttf) format('truetype');
 }
+@font-face {
+  font-family: GothamRegular;
+  src: url(../public/fonts/gotham\ bold.ttf);
+}
+@font-face {
+  font-family: GothamThin;
+  src: url(../public/fonts/GOTHAM\ THIN.ttf);
+}
+@font-face {
+  font-family: GothamBlack;
+  src: url(../public/fonts/gotham\ black.ttf);
+}
+@font-face {
+  font-family: GothamUltra;
+  src: url(../public/fonts/gotham\ ultra.ttf);
+}
 :root {
   --vh: 1vh;
   --root_font_size_prop: 1;
@@ -3633,31 +3649,31 @@ select::-ms-expand {
   margin: 0!important;
 }
 h1 {
-  font-size: 4rem;
-  font-family: 'Open Sans', sans-serif;
+  font-size: 2.88888889rem;
+  font-family: 'GothamBlack', sans-serif;
   line-height: 1em;
 }
 h2 {
   font-size: 2.66666667rem;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'GothamBlack', sans-serif;
   line-height: 1em;
 }
 h3 {
   font-size: 1.77777778rem;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'GothamBlack', sans-serif;
   line-height: 1em;
 }
 h4 {
   font-size: 1.33333333rem;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'GothamBlack', sans-serif;
   line-height: 1em;
 }
 p {
   line-height: 1.4em;
-  font-family: 'Roboto Slab', serif;
+  font-family: 'Open Sans', sans-serif;
 }
 p a:not(.cta) {
-  color: #ac1010;
+  color: #f77777;
 }
 p a:not(.cta):hover {
   text-decoration: underline;
@@ -3666,7 +3682,7 @@ p a:not(.cta):hover {
   display: inline-block;
   padding: 1rem;
   color: #fff;
-  font-family: 'Roboto Slab', serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 1rem;
   background-color: #000;
   border: none;
@@ -3752,7 +3768,7 @@ td {
   text-align: center;
 }
 .form__repeater-button {
-  color: #ac1010;
+  color: #f77777;
   float: right;
   margin-top: 0.25rem;
   cursor: pointer;
@@ -3771,7 +3787,7 @@ td {
 */
 html {
   color: #000;
-  font-family: 'Roboto Slab', serif;
+  font-family: 'Open Sans', sans-serif;
 }
 body {
   -webkit-text-size-adjust: 100%;
@@ -3813,6 +3829,45 @@ body {
   margin-left: auto;
   margin-right: auto;
   width: 80%;
+}
+.g-reg {
+  font-family: 'GothamBold', sans-serif;
+}
+.g-thin {
+  font-family: 'GothamThin', sans-serif;
+}
+.g-bold {
+  font-family: 'GothamBlack', sans-serif;
+}
+.g-ultra {
+  font-family: 'GothamUltra', sans-serif;
+}
+.cta {
+  border: none;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: stretch;
+  padding: 0;
+  background-color: transparent;
+}
+.cta-text {
+  background-color: #f77777;
+  font-weight: 400;
+  padding: 0 1rem;
+  font-size: 1rem;
+  color: #fff;
+  font-family: 'Roboto Slab', serif;
+  display: flex;
+  align-items: center;
+}
+.cta-icon {
+  width: 2rem;
+  height: 2rem;
+  background-color: #E66768;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 /***
 *     ######   #######  ##     ## ########   #######   ######     ###    ##    ## ######## ########  ######  
@@ -3919,7 +3974,7 @@ input[type="tel"],
 textarea {
   border: 1px solid #b3b3b3;
   padding: 0.7rem;
-  font-family: 'Roboto Slab', serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 1rem;
 }
 textarea {
@@ -4002,12 +4057,12 @@ input[type="tel"].erreur,
 input[type="radio"].erreur + span:before,
 input[type="checkbox"].erreur + span:before,
 textarea.erreur {
-  border: 1px solid #ac1010;
+  border: 1px solid #f77777;
 }
 .form__label.erreur,
 input[type="radio"].erreur + span,
 input[type="checkbox"].erreur + span {
-  color: #ac1010;
+  color: #f77777;
 }
 form.loading {
   cursor: progress;
@@ -4056,14 +4111,64 @@ textarea:invalid {
 *    ##     ## ##       ##     ## ##     ## ##       ##    ##  
 *    ##     ## ######## ##     ## ########  ######## ##     ## 
 */
-header {
+header.main-header {
+  width: 100%;
+  padding: 0 2rem;
+  background-color: #ebebeb;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 2rem;
-  background-color: #eee;
 }
-header ul {
-  margin-top: 0;
-  padding-left: 0;
+nav.main-header_navigation ul {
+  display: flex;
+}
+nav.main-header_navigation li {
+  padding: 2rem 1rem;
+}
+nav.main-header_navigation li.active::after {
+  width: 1.5rem;
+  height: 1.5rem;
+  content: "";
+  background-color: #fff;
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 50%) rotate(45deg);
+}
+nav.main-header_navigation a {
+  font-family: 'GothamBlack', sans-serif;
+  font-weight: 700;
+  color: #000;
+  text-transform: uppercase;
+}
+/***
+ *    ##          ###    ##    ##  #######  ##     ## ######## 
+ *    ##         ## ##    ##  ##  ##     ## ##     ##    ##    
+ *    ##        ##   ##    ####   ##     ## ##     ##    ##    
+ *    ##       ##     ##    ##    ##     ## ##     ##    ##    
+ *    ##       #########    ##    ##     ## ##     ##    ##    
+ *    ##       ##     ##    ##    ##     ## ##     ##    ##    
+ *    ######## ##     ##    ##     #######   #######     ##    
+ */
+.wrapper {
+  width: 100%;
+  padding: 0 2rem;
+}
+.wrapper .hero {
+  width: 100%;
+  margin: 2rem 0;
+  display: flex;
+  align-items: center;
+}
+.wrapper .hero-title {
+  text-transform: uppercase;
+  margin-right: 1rem;
+}
+.wrapper .hero-separator {
+  height: 2px;
+  background-color: #000;
+  flex-grow: 1;
+}
+.wrapper .hero > .cta {
+  margin-left: 1rem;
 }

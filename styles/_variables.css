@@ -1,0 +1,12 @@
+:root {
+  --vh: 1vh;
+  --root_font_size_prop: 1;
+}
+:root {
+  --wp_admin_bar_height: 32px;
+}
+@media screen and (max-width: 782px) {
+  :root {
+    --wp_admin_bar_height: 46px;
+  }
+}

@@ -18,22 +18,22 @@ export default function Header({ isUserAdmin }) {
                         </Link>
                     </li>
                     <li className={router.asPath === "/calendar" ? "active" : ""}>
-                        <Link href="/">
+                        <Link href="/calendar">
                             <a>Calendrier</a>
                         </Link>
                     </li>
                     <li className={router.asPath === "/projects" ? "active" : ""}>
-                        <Link href="/">
+                        <Link href="/projects">
                             <a>Projets</a>
                         </Link>
                     </li>
                     <li className={router.asPath === "/clients" ? "active" : ""}>
-                        <Link href="/">
+                        <Link href="/clients">
                             <a>Clients</a>
                         </Link>
                     </li>
                     <li className={router.asPath === "/prospects" ? "active" : ""}>
-                        <Link href="/">
+                        <Link href="/prospects">
                             <a>Prospects</a>
                         </Link>
                     </li>

@@ -41,6 +41,16 @@ body { -webkit-text-size-adjust: 100%; }
 
 .centre { margin-left: auto; margin-right: auto; width: 80%; }
 
+.g-reg { font-family: 'GothamBold', sans-serif; }
+.g-thin { font-family: 'GothamThin', sans-serif; }
+.g-bold { font-family: 'GothamBlack', sans-serif; }
+.g-ultra { font-family: 'GothamUltra', sans-serif; }
+
+.cta { border: none; cursor: pointer; outline: none; display: flex; align-items: stretch; padding: 0; background-color: transparent;
+  &-text { background-color: @color_red; font-weight: 400; padding: 0 1rem; font-size: 1rem; color: @color_white; font-family: @font_emphasis; display: flex; align-items: center; }
+  &-icon { width: 2rem; height: 2rem; background-color: #E66768; display: flex; align-items: center; justify-content: center; }
+
+}
 
 /***
 *     ######   #######  ##     ## ########   #######   ######     ###    ##    ## ######## ########  ######  
@@ -178,5 +188,26 @@ textarea:invalid { box-shadow: none!important; }
 *    ##     ## ##       ##     ## ##     ## ##       ##    ##  
 *    ##     ## ######## ##     ## ########  ######## ##     ## 
 */
-header { display: flex; justify-content: space-between; align-items: center; padding: 2rem; background-color: #eee; }
-header ul { margin-top: 0; padding-left: 0; }
+header.main-header { width: 100%; padding: 0 2rem; background-color: @color_lightgray; display: flex; align-items: center; }
+nav.main-header_navigation {
+  ul { display: flex; }
+  li { padding: 2rem 1rem; }
+  li.active::after { width: 1.5rem; height: 1.5rem; content: ""; background-color: @color_white; display: block; position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 50%) rotate(45deg); }
+  a { .g-bold; font-weight: 700; color: @color_black; text-transform: uppercase; }
+}
+
+/***
+ *    ##          ###    ##    ##  #######  ##     ## ######## 
+ *    ##         ## ##    ##  ##  ##     ## ##     ##    ##    
+ *    ##        ##   ##    ####   ##     ## ##     ##    ##    
+ *    ##       ##     ##    ##    ##     ## ##     ##    ##    
+ *    ##       #########    ##    ##     ## ##     ##    ##    
+ *    ##       ##     ##    ##    ##     ## ##     ##    ##    
+ *    ######## ##     ##    ##     #######   #######     ##    
+ */
+.wrapper { width: 100%; padding: 0 2rem; }
+.wrapper .hero { width: 100%; margin: 2rem 0; display: flex; align-items: center;
+  &-title { text-transform: uppercase; margin-right: 1rem; }
+  &-separator { height: 2px; background-color: @color_black; flex-grow: 1; }
+  > .cta { margin-left: 1rem; }
+}

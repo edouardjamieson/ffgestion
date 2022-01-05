@@ -40,4 +40,11 @@ export default function Cta({ type, text, icon, href, onClick }) {
 
     }
 
+    //Sinon on return un input submit
+    else if(type === "submit") {
+        return <button type="submit" className="cta" onClick={() => onClick ? onClick() : null}>
+            <CTAContent />
+        </button>
+    }
+
 }

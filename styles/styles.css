@@ -3869,6 +3869,16 @@ body {
   align-items: center;
   justify-content: center;
 }
+.loader {
+  width: 100%;
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.loader img {
+  width: 5rem;
+}
 /***
 *     ######   #######  ##     ## ########   #######   ######     ###    ##    ## ######## ########  ######  
 *    ##    ## ##     ## ###   ### ##     ## ##     ## ##    ##   ## ##   ###   ##    ##    ##       ##    ## 

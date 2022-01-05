@@ -1,6 +1,7 @@
 import Cta from './Cta'
+import Loader from './Loader'
 
-export default function Layout({ children, title, hasButton, buttonLabel, buttonFontAwesomeClass, onButtonClick  }) {
+export default function Layout({ children, title, hasButton, buttonLabel, buttonFontAwesomeClass, onButtonClick, isLoading  }) {
     return (
         <div className="wrapper">
 
@@ -23,7 +24,7 @@ export default function Layout({ children, title, hasButton, buttonLabel, button
             }
 
             {/* children est les elements que nous passons dans notre component <Exemple> CONTENU À PASSER </Exemple> */}
-            { children }
+            { isLoading ? <Loader /> : children }
         </div>
     )
 }

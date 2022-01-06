@@ -2,7 +2,7 @@ import { useState } from "react"
 import Cta from "../../components/Cta"
 import Layout from "../../components/Layout"
 
-export default function newProject() {
+export default function NewProject() {
 
     // Avec react, pour la gestion des valeurs des inputs, on doit utiliser des states
     // Tous les inputs ont donc un "value" & un "onChange"

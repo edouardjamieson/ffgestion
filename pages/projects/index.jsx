@@ -3,7 +3,7 @@ import { useRouter } from "next/router"
 import Layout from "../../components/Layout"
 import { getProjects } from "../../functions/database/projects"
 
-export default function index() {
+export default function Index() {
 
     //Permet de get l'objet router
     const router = useRouter()

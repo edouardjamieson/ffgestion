@@ -1,6 +1,6 @@
 import Layout from "../components/Layout";
 
-export default function calendar() {
+export default function Calendar() {
     return (
         <Layout
             title="Calendrier"

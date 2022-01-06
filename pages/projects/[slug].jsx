@@ -47,8 +47,9 @@ export default function SingleProject(project) {
 
     // STATES POUR LE LIVE EDITING
     const [editorContent, setEditorContent] = useState("")
-    const SyncTimeout = useRef(null)
     const [editorCanEdit, setEditorCanEdit] = useState(true)
+    const [editorCurrentlyEditing, setEditorCurrentlyEditing] = useState(false)
+    const SyncTimeout = useRef(null)
 
     const [error, setError] = useState("")
     const [validating, setValidating] = useState(false)
@@ -59,26 +60,38 @@ export default function SingleProject(project) {
 
         db.collection('projects').doc(project.id).onSnapshot(snap => {
             setEditorContent(snap.data().tasks)
+            setEditorCanEdit( snap.data().occupiedBy !== null ? false : true )
         })
         
     }, [])
 
     const handleEditorChange = (val) => {
 
+        // if(editorCanEdit === false) return
 
+        // On set la nouvelle valeur en local
         setEditorContent(val)
 
-        const db_ref = db.collection('projects').doc(project.id)
-        
+        //Si on est pas en train d'éditer, on change le tout pour indiquer qu'on veut éditer
+        if(editorCurrentlyEditing === false) {
+            editProject(project.id, { occupiedBy: 'eddy' })
+            setEditorCurrentlyEditing(true)
+        }
 
+        // On clear le timeout de synchronisation
         clearTimeout(SyncTimeout.current)
+
+        // On set on timeout pour synchroniser
         SyncTimeout.current = setTimeout(() => {
             
             console.log("synching...");
+
+            const db_ref = db.collection('projects').doc(project.id)
             return db.runTransaction(transaction => {
                 return transaction.get(db_ref)
                 .then(() => {
-                    transaction.update(db_ref, { tasks: editorContent })
+                    transaction.update(db_ref, { tasks: editorContent, occupiedBy: null })
+                    setEditorCurrentlyEditing(false)
                 })
             })
 

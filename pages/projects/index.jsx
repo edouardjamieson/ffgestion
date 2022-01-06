@@ -29,6 +29,22 @@ export default function Index() {
         if(projects.length < 1) {
             return <span>Aucun projet.</span>
         }
+
+        return (
+            <div className="projects-list">
+
+                {
+                    projects.map(project =>
+                    <div className="projects-list_item" key={project.id} onClick={() => router.push(`/projects/${project.id}`)}>
+                        <div className="projects-list_item-image" style={{ backgroundImage: `url(${project.data.image})` }}></div>
+                        <div className="projects-list_item-infos">
+                            <span>{ project.data.name }</span>
+                        </div>
+                    </div>)
+                }
+
+            </div>
+        )
     }
 
     return (

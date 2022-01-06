@@ -16,6 +16,7 @@ const app = !firebase.apps.length ? firebase.initializeApp(firebaseConfig) : fir
 // On va chercher les modules qu'on veut
 const db = app.firestore() // Base de donnée
 const fields = firebase.firestore.FieldValue // Champs de base de donnée (permet de faire des requêtes plus complexes)
+const storage = app.storage() // Espace de stockage de fichier
 
 // On export le tout
-export { db, fields }
+export { db, fields, storage }

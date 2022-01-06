@@ -3879,6 +3879,43 @@ body {
 .loader img {
   width: 5rem;
 }
+.error {
+  width: calc(100% - 4rem);
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f77777;
+  color: #fff;
+  padding: 0.5rem 1rem;
+}
+.error span {
+  font-family: 'GothamBold', sans-serif;
+}
+.error button {
+  background-color: transparent;
+  cursor: pointer;
+  color: #fff;
+  border: none;
+  font-size: 1.5rem;
+}
+.validator {
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+.validator img {
+  width: 5rem;
+}
 /***
 *     ######   #######  ##     ## ########   #######   ######     ###    ##    ## ######## ########  ######  
 *    ##    ## ##     ## ###   ### ##     ## ##     ## ##    ##   ## ##   ###   ##    ##    ##       ##    ## 
@@ -4181,4 +4218,85 @@ nav.main-header_navigation a {
 }
 .wrapper .hero > .cta {
   margin-left: 1rem;
+}
+/***
+ *    ########  ########   #######        ## ######## ########  ######  
+ *    ##     ## ##     ## ##     ##       ## ##          ##    ##    ## 
+ *    ##     ## ##     ## ##     ##       ## ##          ##    ##       
+ *    ########  ########  ##     ##       ## ######      ##     ######  
+ *    ##        ##   ##   ##     ## ##    ## ##          ##          ## 
+ *    ##        ##    ##  ##     ## ##    ## ##          ##    ##    ## 
+ *    ##        ##     ##  #######   ######  ########    ##     ######  
+ */
+.create-project {
+  width: 100%;
+}
+#create-project {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.create-project_image {
+  width: 40%;
+}
+.create-project_image #create-project_image-input {
+  display: none;
+}
+.create-project_image-label {
+  display: flex;
+  width: 100%;
+  height: 300px;
+  background-color: #ebebeb;
+  cursor: pointer;
+  border: 3px dashed #f77777;
+  align-items: center;
+  justify-content: center;
+  font-family: 'GothamBlack', sans-serif;
+  color: #d4d4d4;
+  text-transform: uppercase;
+  padding: 2rem;
+}
+.create-project_image-label.preview span {
+  display: none;
+}
+.create-project_image-label.preview img {
+  display: block;
+  width: 100%;
+  height: 300px!important;
+  object-fit: contain;
+}
+.create-project_image-label:not(.preview) img {
+  display: none;
+}
+.create-project_infos {
+  width: 55%;
+  display: flex;
+  flex-direction: column;
+}
+.create-project_infos .cta {
+  margin-top: 2rem;
+  margin-left: auto;
+}
+.projects-list {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 1rem;
+  row-gap: 2rem;
+}
+.projects-list_item {
+  width: 100%;
+  background-color: #ebebeb;
+  border: 1px solid #d4d4d4;
+  border-radius: 5px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.projects-list_item-image {
+  width: 100%;
+  height: 200px;
+  background-size: cover;
+}
+.projects-list_item-infos {
+  padding: 1rem;
 }

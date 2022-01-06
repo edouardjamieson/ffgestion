@@ -262,7 +262,10 @@ nav.main-header_navigation {
 // SINGLE D'UN PROJET
 // ====================================================================
 .single-project { width: 100%; display: flex; justify-content: space-between; }
-.single-project_tasks { width: 60%; }
+.single-project_tasks { width: 60%;
+  &-container { width: 100%; }
+  #single-project_tasks { width: 100%; height: 50vh; border: 1px solid @color_gray; }
+}
 .single-project_infos { width: 35%;
   &-banner { width: 100%; height: 300px; background-size: cover; background-position: center; }
   &-container { width: 100%; background-color: @color_lightgray; padding: 1rem; margin-top: 1rem;

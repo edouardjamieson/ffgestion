@@ -2,7 +2,7 @@
 // CE DOCUMENT VA GÉNÉRER TOUS LES PROJETS (SINGLE)
 // ====================================================================
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Cta from "../../components/Cta"
 import Layout from "../../components/Layout"
 import { db } from "../../functions/firebase"
@@ -45,8 +45,40 @@ export default function SingleProject(project) {
     // STATES POUR LA CONFIGURATION
     const [configName, setConfigName] = useState(project.data.name)
 
+    // STATES POUR LE LIVE EDITING
+    const [editorContent, setEditorContent] = useState("")
+    const SyncTimeout = useRef(null)
+    const [editorCanEdit, setEditorCanEdit] = useState(true)
+
     const [error, setError] = useState("")
     const [validating, setValidating] = useState(false)
+
+
+
+    useEffect(() => {
+
+        db.collection('projects').doc(project.id).onSnapshot(snap => {
+            setEditorContent(snap.data().tasks)
+        })
+        
+    }, [])
+
+    const handleEditorChange = (val) => {
+
+
+        setEditorContent(val)
+        clearTimeout(SyncTimeout.current)
+        SyncTimeout.current = setTimeout(() => {
+            
+            setEditorCanEdit(false)
+            console.log("synching...");
+            editProject(project.id, { tasks: val })
+            .then(() => setEditorCanEdit(true))
+
+        }, 1000);
+        
+
+    }
 
 
     // ====================================================================
@@ -96,7 +128,13 @@ export default function SingleProject(project) {
 
             <div className="single-project">
 
-                <div className="single-project_tasks"></div>
+                <div className="single-project_tasks">
+
+                    <div className="single-project_tasks-container">
+                        <textarea id="single-project_tasks" value={editorContent} onChange={e => handleEditorChange(e.target.value)} disabled={ editorCanEdit ? "" : "disabled" }></textarea>
+                    </div>                
+
+                </div>
 
                 <div className="single-project_infos">
 

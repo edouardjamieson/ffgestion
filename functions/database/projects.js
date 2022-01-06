@@ -82,6 +82,5 @@ export async function getProject(id) {
 export async function editProject(project_id, data) {
 
     const query = await db.collection('projects').doc(project_id).update(data)
-    
 
 }

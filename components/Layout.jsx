@@ -1,7 +1,7 @@
 import Cta from './Cta'
 import Loader from './Loader'
 
-export default function Layout({ children, title, hasButton, buttonLabel, buttonFontAwesomeClass, onButtonClick, isLoading  }) {
+export default function Layout({ children, title, hasButton, buttonLabel, buttonFontAwesomeClass, onButtonClick, isLoading, isValidating  }) {
     return (
         <div className="wrapper">
 

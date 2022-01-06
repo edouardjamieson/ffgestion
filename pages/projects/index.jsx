@@ -1,7 +1,6 @@
-import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
+import { useRouter } from "next/router"
 import Layout from "../../components/Layout"
-import { getUsersExemple } from "../../functions/database/exemple"
 import { getProjects } from "../../functions/database/projects"
 
 export default function index() {

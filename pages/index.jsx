@@ -7,9 +7,6 @@ export default function Home() {
 
   const router = useRouter()
 
-  getAuth()
-  .then(auth => { if(!auth) router.push('/login') })
-
   return (
     <Layout
       title="Aujourd'hui"

@@ -74,3 +74,19 @@ export async function setAuth(username, password) {
 
 }
 
+// ====================================================================
+// Récupère un utilisateur par son ID
+// ====================================================================
+/**
+ * Permet d'avoir les infos d'un utilisateur par son id
+ * @param user_id "ID de l'utilisateur"
+ * @returns "Un objet contenant les infos de l'utilisateur ou null si inexistant"
+ */
+export async function getUserByID(user_id) {
+    
+    const query = await db.collection('users').doc(user_id).get()
+
+    if(!query.exists) return null
+    return parseFirebaseDoc(query)
+
+}

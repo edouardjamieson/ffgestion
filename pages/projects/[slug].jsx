@@ -11,6 +11,7 @@ import Error from "../../components/Error"
 import { slugify } from "../../functions/utils/string"
 import { editProject } from "../../functions/database/projects"
 import { useRouter } from "next/router"
+import { getAuthID } from "../../functions/database/users"
 
 // Permet d'aller pre-fetch les informations d'un projet avant de construire la page
 export async function getServerSideProps(context) {
@@ -47,8 +48,8 @@ export default function SingleProject(project) {
 
     // STATES POUR LE LIVE EDITING
     const [editorContent, setEditorContent] = useState("")
-    const [editorCanEdit, setEditorCanEdit] = useState(true)
-    const [editorCurrentlyEditing, setEditorCurrentlyEditing] = useState(false)
+    const [localEditorContent, setLocalEditorContent] = useState("")
+    const [editorEditingUser, setEditorEditingUser] = useState(null)
     const SyncTimeout = useRef(null)
 
     const [error, setError] = useState("")
@@ -60,23 +61,22 @@ export default function SingleProject(project) {
 
         db.collection('projects').doc(project.id).onSnapshot(snap => {
             setEditorContent(snap.data().tasks)
-            setEditorCanEdit( snap.data().occupiedBy !== null ? false : true )
+
+            if(snap.data().occupiedBy === null) { setEditorEditingUser(null) }
+            else { setEditorEditingUser(snap.data().occupiedBy) }
         })
         
     }, [])
 
     const handleEditorChange = (val) => {
 
-        // if(editorCanEdit === false) return
+        // Si personne est en train d'éditer on se set pour l'édition et on bloque l'éditeur
+        if(editorEditingUser === null) {
+            editProject(project.id, { occupiedBy: getAuthID() })
+        }
 
         // On set la nouvelle valeur en local
         setEditorContent(val)
-
-        //Si on est pas en train d'éditer, on change le tout pour indiquer qu'on veut éditer
-        if(editorCurrentlyEditing === false) {
-            editProject(project.id, { occupiedBy: 'eddy' })
-            setEditorCurrentlyEditing(true)
-        }
 
         // On clear le timeout de synchronisation
         clearTimeout(SyncTimeout.current)
@@ -85,14 +85,9 @@ export default function SingleProject(project) {
         SyncTimeout.current = setTimeout(() => {
             
             console.log("synching...");
-
-            const db_ref = db.collection('projects').doc(project.id)
-            return db.runTransaction(transaction => {
-                return transaction.get(db_ref)
-                .then(() => {
-                    transaction.update(db_ref, { tasks: editorContent, occupiedBy: null })
-                    setEditorCurrentlyEditing(false)
-                })
+            editProject(project.id, {
+                tasks: val,
+                occupiedBy: null
             })
 
         }, 2000);
@@ -151,7 +146,10 @@ export default function SingleProject(project) {
                 <div className="single-project_tasks">
 
                     <div className="single-project_tasks-container">
-                        <textarea id="single-project_tasks" value={editorContent} onChange={e => handleEditorChange(e.target.value)} disabled={ editorCanEdit ? "" : "disabled" }></textarea>
+                        <textarea id="single-project_tasks" value={editorContent} onChange={e => handleEditorChange(e.target.value)} disabled={ editorEditingUser === null || editorEditingUser === getAuthID() ? "" : "disabled" }></textarea>
+                        <div className="single-project_tasks-editor">
+
+                        </div>
                     </div>                
 
                 </div>

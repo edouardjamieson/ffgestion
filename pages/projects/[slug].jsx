@@ -67,15 +67,22 @@ export default function SingleProject(project) {
 
 
         setEditorContent(val)
+
+        const db_ref = db.collection('projects').doc(project.id)
+        
+
         clearTimeout(SyncTimeout.current)
         SyncTimeout.current = setTimeout(() => {
             
-            setEditorCanEdit(false)
             console.log("synching...");
-            editProject(project.id, { tasks: val })
-            .then(() => setEditorCanEdit(true))
+            return db.runTransaction(transaction => {
+                return transaction.get(db_ref)
+                .then(() => {
+                    transaction.update(db_ref, { tasks: editorContent })
+                })
+            })
 
-        }, 1000);
+        }, 2000);
         
 
     }

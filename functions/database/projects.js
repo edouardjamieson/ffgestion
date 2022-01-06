@@ -1,4 +1,5 @@
 import { parseFirebaseDocs, parseFirebaseDoc } from '../utils/dataparser'
+import { slugify } from '../utils/string'
 import { db, fields, storage } from './../firebase'
 /***
  *    ########  ########   #######        ## ########  ######  ########  ######  
@@ -59,6 +60,7 @@ export async function getProject(id) {
 
     const project = {
         name: data.name,
+        slug: slugify(data.name),
         image: image_url,
         created_at: Date.now(),
         tasks: ""
@@ -68,3 +70,18 @@ export async function getProject(id) {
     return query.id
 }
 
+// ====================================================================
+// Update les infos d'un projet
+// ====================================================================
+/**
+ * Permet de modifier les informations générales d'un projet
+ * @param project_id "id du project à modifier"
+ * @param data "Objet contenant les informations à modifier"
+ * @returns "Retourne true"
+ */
+export async function editProject(project_id, data) {
+
+    const query = await db.collection('projects').doc(project_id).update(data)
+    
+
+}

@@ -4300,3 +4300,49 @@ nav.main-header_navigation a {
 .projects-list_item-infos {
   padding: 1rem;
 }
+.single-project {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.single-project_tasks {
+  width: 60%;
+}
+.single-project_infos {
+  width: 35%;
+}
+.single-project_infos-banner {
+  width: 100%;
+  height: 300px;
+  background-size: cover;
+  background-position: center;
+}
+.single-project_infos-container {
+  width: 100%;
+  background-color: #ebebeb;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+.single-project_infos-container h4 {
+  width: 100%;
+  border-bottom: 2px solid #d4d4d4;
+  padding-bottom: 0.5rem;
+}
+.single-project_infos-container p {
+  margin-top: 1rem;
+}
+.single-project_infos-container .cta {
+  margin-top: 1rem;
+  margin-left: auto;
+}
+.single-project_infos-container .input-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+.single-project_infos-container .input-container span {
+  font-family: 'Roboto Slab', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}

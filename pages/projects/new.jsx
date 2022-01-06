@@ -4,7 +4,7 @@ import Cta from "../../components/Cta"
 import Error from "../../components/Error"
 import Layout from "../../components/Layout"
 import { addProject } from "../../functions/database/projects"
-import { checkIfImage, sanitizeFileName } from "../../functions/utils/files"
+import { checkIfImage, sanitizeFileName } from "../../functions/utils/string"
 
 export default function NewProject() {
 

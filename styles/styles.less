@@ -257,3 +257,20 @@ nav.main-header_navigation {
   &-image { width: 100%; height: 200px; background-size: cover; }
   &-infos { padding: 1rem; }
 }
+
+// ====================================================================
+// SINGLE D'UN PROJET
+// ====================================================================
+.single-project { width: 100%; display: flex; justify-content: space-between; }
+.single-project_tasks { width: 60%; }
+.single-project_infos { width: 35%;
+  &-banner { width: 100%; height: 300px; background-size: cover; background-position: center; }
+  &-container { width: 100%; background-color: @color_lightgray; padding: 1rem; margin-top: 1rem;
+    h4 { width: 100%; border-bottom: 2px solid @color_gray; padding-bottom: 0.5rem; }
+    p { margin-top: 1rem; }
+    .cta { margin-top: 1rem; margin-left: auto; }
+    .input-container { display: flex; flex-direction: column; margin-top: 1rem;
+      span { font-family: @font_emphasis; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.5rem; }
+    }
+  }
+}

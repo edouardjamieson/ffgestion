@@ -35,7 +35,7 @@ export default function Index() {
 
                 {
                     projects.map(project =>
-                    <div className="projects-list_item" key={project.id} onClick={() => router.push(`/projects/${project.id}`)}>
+                    <div className="projects-list_item" key={project.id} onClick={() => router.push(`/projects/${project.data.slug}`)}>
                         <div className="projects-list_item-image" style={{ backgroundImage: `url(${project.data.image})` }}></div>
                         <div className="projects-list_item-infos">
                             <span>{ project.data.name }</span>

@@ -4346,6 +4346,14 @@ nav.main-header_navigation a {
   height: 50vh;
   border: 1px solid #d4d4d4;
 }
+.single-project_tasks .single-project_tasks-editor {
+  position: absolute;
+  bottom: 1px;
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #000;
+  padding: 1rem;
+  width: 100%;
+}
 .single-project_infos {
   width: 35%;
 }

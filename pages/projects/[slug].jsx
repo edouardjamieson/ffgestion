@@ -11,7 +11,7 @@ import Error from "../../components/Error"
 import { slugify } from "../../functions/utils/string"
 import { editProject } from "../../functions/database/projects"
 import { useRouter } from "next/router"
-import { getAuthID } from "../../functions/database/users"
+import { getAuthID, getUserByID } from "../../functions/database/users"
 
 // Permet d'aller pre-fetch les informations d'un projet avant de construire la page
 export async function getServerSideProps(context) {
@@ -48,9 +48,11 @@ export default function SingleProject(project) {
 
     // STATES POUR LE LIVE EDITING
     const [editorContent, setEditorContent] = useState("")
-    const [localEditorContent, setLocalEditorContent] = useState("")
     const [editorEditingUser, setEditorEditingUser] = useState(null)
+    const [editorEditingUserName, setEditorEditingUserName] = useState("")
     const SyncTimeout = useRef(null)
+    const FocusTimeout = useRef(null)
+    const TextArea = useRef(null)
 
     const [error, setError] = useState("")
     const [validating, setValidating] = useState(false)
@@ -62,18 +64,61 @@ export default function SingleProject(project) {
         db.collection('projects').doc(project.id).onSnapshot(snap => {
             setEditorContent(snap.data().tasks)
 
-            if(snap.data().occupiedBy === null) { setEditorEditingUser(null) }
-            else { setEditorEditingUser(snap.data().occupiedBy) }
+            if(snap.data().occupiedBy === null) { setEditorEditingUser(null); setEditorEditingUserName("") }
+            else {
+                setEditorEditingUser(snap.data().occupiedBy)
+                getUserByID(snap.data().occupiedBy)
+                .then(user => setEditorEditingUserName(user.data.username))
+            }
+
+            if(snap.data().occupiedBy === getAuthID()) {
+                TextArea.current.focus()
+            }
         })
+
+        window.onbeforeunload = () => {
+            handleFocusOut()
+        }
         
     }, [])
 
+    const handleFocusIn = (e) => {
+
+        // Si quelqu'un est déjà en train d'étider on bail
+        if(editorEditingUser !== null) return
+
+        // Quand on focus le textarea on indique à la bdd qu'on veut éditer
+        editProject(project.id, { occupiedBy: getAuthID() })
+
+        // On set un timer de 10 secondes pour cancel le focus
+        FocusTimeout.current = setTimeout(handleFocusOut, 10000)
+
+
+    }
+
+    const handleFocusOut = (e) => {
+
+        // Si personne est en train d'éditer on bail
+        if(editorEditingUser === null) return
+
+        // Si on est pas la personne qui éditait on bail
+        if(editorEditingUser !== getAuthID()) return
+
+        // Si on est en focus sur le textarea on focus out
+        if(document.activeElement.id === "single-project_tasks") TextArea.current.blur()
+
+        // Si on focus out on cancel le timeout
+        clearTimeout(FocusTimeout.current)
+
+        // On indique à la bdd qu'on a arrêté d'éditer & on sync les changement
+        editProject(project.id, { occupiedBy: null, tasks: editorContent })
+    }
+
     const handleEditorChange = (val) => {
 
-        // Si personne est en train d'éditer on se set pour l'édition et on bloque l'éditeur
-        if(editorEditingUser === null) {
-            editProject(project.id, { occupiedBy: getAuthID() })
-        }
+        // On cancel & reset le timeout de focus
+        clearTimeout(FocusTimeout.current)
+        FocusTimeout.current = setTimeout(handleFocusOut, 10000)
 
         // On set la nouvelle valeur en local
         setEditorContent(val)
@@ -87,10 +132,9 @@ export default function SingleProject(project) {
             console.log("synching...");
             editProject(project.id, {
                 tasks: val,
-                occupiedBy: null
             })
 
-        }, 2000);
+        }, 1000);
         
 
     }
@@ -146,10 +190,20 @@ export default function SingleProject(project) {
                 <div className="single-project_tasks">
 
                     <div className="single-project_tasks-container">
-                        <textarea id="single-project_tasks" value={editorContent} onChange={e => handleEditorChange(e.target.value)} disabled={ editorEditingUser === null || editorEditingUser === getAuthID() ? "" : "disabled" }></textarea>
-                        <div className="single-project_tasks-editor">
-
-                        </div>
+                        <textarea id="single-project_tasks"
+                            value={editorContent}
+                            onChange={e => handleEditorChange(e.target.value)}
+                            onFocus={e => handleFocusIn(e)}
+                            onBlur={e => handleFocusOut(e)}
+                            ref={TextArea}
+                            disabled={ editorEditingUser === null || editorEditingUser === getAuthID() ? "" : "disabled" }>
+                        </textarea>
+                        {
+                            editorEditingUserName ? 
+                            <div className="single-project_tasks-editor">
+                                { editorEditingUserName }
+                            </div> : null
+                        }
                     </div>                
 
                 </div>

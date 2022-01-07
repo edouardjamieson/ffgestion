@@ -61,16 +61,28 @@ export default function SingleProject(project) {
 
     useEffect(() => {
 
+        // On démarre un live session avec nos données du projet
         db.collection('projects').doc(project.id).onSnapshot(snap => {
+
+            // ====================================================================
+            // Ce code est appelé chaque fois qu'il y a un changement dans le projet
+            // ====================================================================
+
+            // Update le contenu de l'éditeur
             setEditorContent(snap.data().tasks)
 
+            // Si plus personne edit, on set les states en conséquences
             if(snap.data().occupiedBy === null) { setEditorEditingUser(null); setEditorEditingUserName("") }
+            
+            // Sinon on set les states & on va chercher les infos de la personne qui edit
             else {
                 setEditorEditingUser(snap.data().occupiedBy)
                 getUserByID(snap.data().occupiedBy)
                 .then(user => setEditorEditingUserName(user.data.username))
             }
 
+            // Si on est la personne qui edit, on force un focus
+            // Ceci est utile si on refresh la page pendant qu'on edit
             if(snap.data().occupiedBy === getAuthID()) {
                 TextArea.current.focus()
             }

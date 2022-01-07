@@ -4175,9 +4175,17 @@ nav.main-header_navigation a {
  *    ##       ##     ##    ##    ##     ## ##     ##    ##    
  *    ######## ##     ##    ##     #######   #######     ##    
  */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 .wrapper {
   width: 100%;
   padding: 0 2rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 .wrapper .hero {
   width: 100%;
@@ -4381,14 +4389,16 @@ nav.main-header_navigation a {
  */
 .calendar {
   width: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 .calendar-picker {
   display: flex;
   width: 100%;
-  justify-content: space-between;
   align-items: center;
   text-transform: uppercase;
-  margin-bottom: 1rem;
+  padding: 1rem;
 }
 .calendar-picker_button {
   background-color: transparent;
@@ -4401,31 +4411,38 @@ nav.main-header_navigation a {
 .calendar-picker_button span {
   font-family: 'GothamBlack', sans-serif;
   text-transform: uppercase;
-  font-size: 1rem;
+  font-size: 0.8rem;
 }
 .calendar-picker_button i {
-  font-size: 0.8rem;
+  font-size: 1rem;
 }
 .calendar-picker_current {
   font-size: 1.5rem;
   font-family: 'GothamBlack', sans-serif;
+  margin-right: auto;
 }
 .calendar-head {
+  background-color: #ebebeb;
+}
+.calendar-head_days {
   display: flex;
-  margin-bottom: 1rem;
   gap: 0.2rem;
 }
 .calendar-head_day {
   width: calc(100% / 12 * 2);
   display: flex;
-  background-color: #ebebeb;
   align-items: center;
-  justify-content: center;
-  padding: 0.5rem 0;
+  padding: 1rem;
   font-family: 'Roboto Slab', serif;
 }
 .calendar-head_day.weekend {
   width: calc(100% / 12);
+}
+.calendar-content {
+  width: 100%;
+  flex-grow: 1;
+  overflow-y: scroll;
+  height: calc(var(--calendar-height) * 1px);
 }
 .calendar-week {
   width: 100%;
@@ -4453,4 +4470,10 @@ nav.main-header_navigation a {
 }
 .calendar-week_day.before-today {
   background-color: #ebebeb;
+}
+.calendar-week_trigger {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: red;
 }

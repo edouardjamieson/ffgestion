@@ -328,14 +328,27 @@ nav.main-header_navigation {
 
 .calendar-content { width: 100%; flex-grow: 1; overflow-y: scroll; height: calc(var(--calendar-height) * 1px); }
 .calendar-month { width: 100%; display: flex; flex-wrap: wrap; margin-bottom: 2rem; border-bottom: 5px solid red; }
-.calendar-day { width: calc(100% / 12 * 2);
-  border: 1px solid @color_gray; border-right: none; border-bottom: none; padding: 0.5rem; height: 150px;
+.calendar-day { width: calc(100% / 12 * 2); border: 1px solid @color_gray; border-right: none; border-bottom: none; padding: 0.5rem; min-height: 150px;
   &:nth-child(n + 7) { border-right: 1px solid @color_gray; }
   &.weekend { width: calc(100% / 12); }
-  &.today { border: 1px solid @color_red }
   &.before-today { background-color: @color_lightgray; }
+  &_head { text-align: right; .g-bold; font-size: 1.5rem; color: @color_gray; }
+  &.today > &_head { color: @color_red }
 }
 
+.calendar-event { width: 100%; cursor: pointer; margin-top: 0.5rem;
+  // TAGS
+  &.tag-important { background-color: @color_red; color: @color_white; }
+  &.tag-blue { background-color: @color_blue; color: @color_white; }
+
+  // content
+  &_head { background-color: fade(@color_black, 10%); padding: 0.5rem; display: flex; align-items: center; justify-content: space-between;
+    &-actions { display: flex; align-items: center; }
+    &-action { background-color: transparent; border:none; color: fade(@color_black, 30%); cursor: pointer; padding: 0; margin-left: 0.5rem; }
+    &-tag { font-size: 0.8rem; color: fade(@color_black, 30%); font-size: 0.8rem; .g-bold }
+  }
+  &_body { padding: 0.5rem; }
+}
 
 .calendar-week { width: 100%; display: flex; }
 .calendar-week:nth-last-child(1) .calendar-week_day { border-bottom: 1px solid @color_gray; }

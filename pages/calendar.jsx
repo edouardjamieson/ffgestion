@@ -13,6 +13,11 @@ export default function Calendar() {
     // STATES POUR LE CALENDRIER
     const [momentValue, setMomentValue] = useState(moment())
     const [calendar, setCalendar] = useState([])
+    const [calendarEvents, setCalendarEvents] = useState([
+        { date: '27/01/2022', title:'yo', desc:'xd', tag: 'important' },
+        { date: '27/01/2022', title:'ne pas oublier daller acheter du lait', desc:'xd', tag: 'blue' },
+        { date: '22/01/2022', title:'yeet', desc:'xd', tag: '' },
+    ])
 
     const [calendarYear, setCalendarYear] = useState(2022)
 
@@ -112,7 +117,12 @@ export default function Calendar() {
                 <CalendarHead
                     onClickToday={() => scrollToToday()}
                 />
-                <CalendarBody calendar={calendar} onScroll={e => handleCalendarScroll(e)} onBuiltToday={() => scrollToToday()} />
+                <CalendarBody
+                    calendar={calendar}
+                    onScroll={e => handleCalendarScroll(e)}
+                    onBuiltToday={() => scrollToToday()}
+                    events={calendarEvents}
+                />
             </div>
 
 

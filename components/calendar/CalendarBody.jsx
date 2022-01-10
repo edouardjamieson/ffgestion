@@ -2,7 +2,7 @@ import moment from "moment"
 import { isBeforeToday, isToday, isWeekend } from "../../functions/utils/dates"
 import CalendarCell from "./CalendarCell"
 
-export default function CalendarBody({calendar, onScroll, onBuiltToday}) {
+export default function CalendarBody({calendar, onScroll, onBuiltToday, events}) {
 
     // Permet de donner la bonne classe aux cellules
     const getStyles = (day) => {
@@ -29,7 +29,12 @@ export default function CalendarBody({calendar, onScroll, onBuiltToday}) {
                                         setTimeout(onBuiltToday, 500)
                                     }
                                     return (
-                                        <CalendarCell styles={getStyles(day)} key={`${day.format('D-M')}`} dataDate={day.format('D/MM/YYYY')}>
+                                        <CalendarCell
+                                            styles={getStyles(day)}
+                                            key={`${day.format('D-M')}`}
+                                            date={day}
+                                            events={ events.filter(event => event.date === day.format('D/MM/YYYY')) }
+                                        >
                                             { day.format('D') }
                                         </CalendarCell>
                                     )

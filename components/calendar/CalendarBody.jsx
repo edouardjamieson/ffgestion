@@ -25,6 +25,13 @@ export default function CalendarBody({calendar, onScroll, onBuiltToday, events})
                         <div className="calendar-month" data-month={i} key={i}>
                             {
                                 days.map(day => {
+                                    if(day === "placeholder") {
+                                        return <CalendarCell placeholder={true} />
+                                    }
+                                    if(day === "placeholder-weekend") {
+                                        return <CalendarCell placeholder="weekend" />
+                                    }
+
                                     if(isToday(day)) {
                                         setTimeout(onBuiltToday, 500)
                                     }

@@ -2,9 +2,11 @@ import moment, { updateLocale } from "moment";
 import { useEffect, useRef, useState } from "react";
 import CalendarBody from "../components/calendar/CalendarBody";
 import CalendarHead from "../components/calendar/CalendarHead";
+import Cta from "../components/Cta";
 import Layout from "../components/Layout";
 import Modal from "../components/Modal";
 import { getMonthInFrench } from "../functions/utils/dataparser";
+import Error from '../components/Error'
 
 export default function Calendar() {
 
@@ -13,20 +15,28 @@ export default function Calendar() {
     // STATES POUR LE CALENDRIER
     const [momentValue, setMomentValue] = useState(moment())
     const [calendar, setCalendar] = useState([])
-    const [calendarEvents, setCalendarEvents] = useState([
-        { date: '27/01/2022', title:'yo', desc:'xd', tag: 'important' },
-        { date: '27/01/2022', title:'ne pas oublier daller acheter du lait', desc:'xd', tag: 'blue' },
-        { date: '22/01/2022', title:'yeet', desc:'xd', tag: '' },
-    ])
+    const [calendarEvents, setCalendarEvents] = useState([])
 
     const [calendarYear, setCalendarYear] = useState(2022)
 
     const [modalVisible, setModalVisible] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [validating, setValidating] = useState(false)
+    const [error, setError] = useState("")
+
+    const [newEventTitle, setNewEventTitle] = useState("")
+    const [newEventDesc, setNewEventDesc] = useState("")
+    const [newEventDate, setNewEventDate] = useState("")
+    const [newEventTag, setNewEventTag] = useState("")
 
     let calendar_height = 0
     let calendar_scroll = 0
 
     useEffect(() => {
+
+        // ====================================================================
+        // Construit le calendrier
+        // ====================================================================
 
         // Détermine la hauteur du calendrier 
         setCalendarHeight()
@@ -36,14 +46,42 @@ export default function Calendar() {
         // On loop au travers des 12 mois pour ajouter nos objets moments & build le calendrier
         for (let i = 0; i < 12; i++) {
 
+            // On target le mois
             const month = moment().month(i)
-            const startDate = month.clone().startOf('month').startOf('week')
-            const endDate = month.clone().endOf('month').endOf('week')
+
+            // On target le début & la fin du mois
+            const startDate = month.clone().startOf('month')
+            const endDate = month.clone().endOf('month')
+
+            // On target les jours du début/fin des mois (ex: lundi/mardi/etc)
+            const startDay = startDate.isoWeekday()
+            const endDay = endDate.isoWeekday()
+
             const iterator = startDate.clone().subtract(1, 'day')
-            
+
+            // On fait un array & on ajoute les placeholder
             let days = []
+            if(startDay !== 1) {
+                days = Array(startDay-1).fill(0).map((n,i) => {
+                    // Regarde si on est un weekend ou non
+                    if(startDay === 7 && i === 5) { return "placeholder-weekend" }
+                    return "placeholder"
+                })
+            }
+
+            // On remplit le calendrier avec nos jours
             while(iterator.isBefore(endDate, 'day')) {
                 days.push(iterator.add(1, 'day').clone())
+            }
+
+            // On ajoute les placeholders de fin
+            if(endDay < 7) {
+                days = days.concat(Array(7 - endDay).fill(0).map((n,i) => {
+                    // Regarde si on est un weekend ou non
+                    const loop = 7-endDay
+                    if(i === loop-1 || i === loop-2) { return "placeholder-weekend" }
+                    return "placeholder"
+                }))  
             }
 
             cal[i] = {
@@ -54,6 +92,13 @@ export default function Calendar() {
 
         console.log(cal);
         setCalendar(cal)
+
+        // ====================================================================
+        // Va chercher les events
+        // ====================================================================
+
+
+
         // Le useEffect est set sur le momentValue pcq on veut tout recalculer si la valeur
         // de moment() change (ex: changer de mois)
     }, [momentValue])
@@ -85,6 +130,12 @@ export default function Calendar() {
         }
     }
 
+    const handleAddEvent = (e) => {
+        e.preventDefault()
+        setValidating(true)
+
+    }
+
     // ====================================================================
     // HELPERS
     // ====================================================================
@@ -110,6 +161,8 @@ export default function Calendar() {
             title="Calendrier"
             hasButton={true}
             buttonLabel="Ajouter un évènement"
+            onButtonClick={() => setModalVisible(true)}
+            isValidating={validating}
         >
 
 
@@ -132,7 +185,27 @@ export default function Calendar() {
                     title="ajouter un évènement"
                     onExit={() => setModalVisible(false)}
                 >
-                    yo
+
+                    <form id="calendar-event_new" onSubmit={e => handleAddEvent(e)}>
+                        <input type="text" placeholder="Nom de l'évènement" value={newEventTitle} onChange={e => setNewEventTitle(e.target.value)} />
+                        <input type="text" placeholder="Description de l'évènement" value={newEventDesc} onChange={e => setNewEventDesc(e.target.value)} />
+                        <input type="date" placeholder="Date" value={newEventDate} onChange={e => setNewEventDate(e.target.value)} />
+                        <select value={newEventTag} onChange={e => setNewEventTag(e.target.value)}>
+                            <option disabled="disabled">Tag</option>
+                            <option value="default">⚪️ Aucun</option>
+                            <option value="important">🔴 Important</option>
+                            <option value="blue">🔵 Bleu</option>
+                            <option value="green">🟢 Vert</option>
+                        </select>
+
+                        <Cta type="submit" text="Ajouter" icon="fas fa-check" />
+                    </form>
+
+                    {
+                        error ?
+                        <Error text={error} onDismiss={() => setError("")} /> : null
+                    }
+
                 </Modal> : null
             }
 

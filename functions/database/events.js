@@ -64,3 +64,18 @@ export async function editEvent(id, data) {
     return true
 
 }
+
+// ====================================================================
+// Supprime un évènement dans le calendrier
+// ====================================================================
+/**
+ * Permet d'edit un event du calendrier
+ * @param id "Id de l'event à supprimer"
+ * @returns "Retourne true"
+ */
+ export async function deleteEvent(id) {
+
+    const query = await db.collection('events').doc(id).delete()
+    return true
+
+}

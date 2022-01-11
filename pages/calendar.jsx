@@ -7,7 +7,7 @@ import Layout from "../components/Layout";
 import Modal from "../components/Modal";
 import { getMonthInFrench, parseFirebaseDocs } from "../functions/utils/dataparser";
 import Error from '../components/Error'
-import { addEvent, getEvents } from "../functions/database/events";
+import { addEvent, deleteEvent, getEvents } from "../functions/database/events";
 import { db } from "../functions/firebase";
 
 export default function Calendar() {
@@ -21,6 +21,7 @@ export default function Calendar() {
 
     const [calendarYear, setCalendarYear] = useState(2022)
 
+    const [modalScreen, setModalScreen] = useState("add")
     const [modalVisible, setModalVisible] = useState(false)
     const [loading, setLoading] = useState(true)
     const [validating, setValidating] = useState(false)
@@ -30,6 +31,7 @@ export default function Calendar() {
     const [newEventDesc, setNewEventDesc] = useState("")
     const [newEventDate, setNewEventDate] = useState("")
     const [newEventTag, setNewEventTag] = useState("default")
+    const [deleteEventID, setDeleteEventID] = useState("")
 
     let calendar_height = 0
     let calendar_scroll = 0
@@ -177,6 +179,18 @@ export default function Calendar() {
 
     }
 
+    const handleDeleteEvent = () => {
+
+        setValidating(true)
+
+        deleteEvent(deleteEventID)
+        .then(() => {
+            setValidating(false)
+            setModalVisible(false)
+        })
+
+    }
+
     // ====================================================================
     // HELPERS
     // ====================================================================
@@ -202,7 +216,7 @@ export default function Calendar() {
             title={`Calendrier ${calendarYear}`}
             hasButton={true}
             buttonLabel="Ajouter un évènement"
-            onButtonClick={() => setModalVisible(true)}
+            onButtonClick={() => {setModalScreen("add"); setModalVisible(true)}}
             isValidating={validating}
             isLoading={loading}
         >
@@ -221,8 +235,10 @@ export default function Calendar() {
                         setNewEventDate(date)
                         setModalVisible(true)
                     }}
-                    onMovedEvent={() => {
-                        // setMomentValue(moment())
+                    onDeleteEvent={(id) => {
+                        setDeleteEventID(id)
+                        setModalScreen("delete")
+                        setModalVisible(true)
                     }}
                 />
             </div>
@@ -231,24 +247,48 @@ export default function Calendar() {
             {
                 modalVisible ?
                 <Modal
-                    title="ajouter un évènement"
+                    title={
+                        modalScreen === "add" ?
+                        "ajouter un évènement" :
+                        modalScreen === "edit" ?
+                        "modifier cet évènement" :
+                        modalScreen === "delete" ?
+                        "supprimer cet évènement ?" : null
+
+                    }
                     onExit={() => setModalVisible(false)}
                 >
+                    {
+                        modalScreen === "add" ?
+                        <form id="calendar-event_new" onSubmit={e => handleAddEvent(e)}>
+                            <input type="text" placeholder="Nom de l'évènement" value={newEventTitle} onChange={e => setNewEventTitle(e.target.value)} required="required" />
+                            <input type="text" placeholder="Description de l'évènement" value={newEventDesc} onChange={e => setNewEventDesc(e.target.value)} />
+                            <input type="date" placeholder="Date" value={newEventDate} onChange={e => setNewEventDate(e.target.value)} required="required"  />
+                            <select value={newEventTag} onChange={e => setNewEventTag(e.target.value)} required="required" >
+                                <option disabled="disabled">Tag</option>
+                                <option value="default">⚪️ Aucun</option>
+                                <option value="important">🔴 Important</option>
+                                <option value="blue">🔵 Bleu</option>
+                                <option value="green">🟢 Vert</option>
+                            </select>
 
-                    <form id="calendar-event_new" onSubmit={e => handleAddEvent(e)}>
-                        <input type="text" placeholder="Nom de l'évènement" value={newEventTitle} onChange={e => setNewEventTitle(e.target.value)} required="required" />
-                        <input type="text" placeholder="Description de l'évènement" value={newEventDesc} onChange={e => setNewEventDesc(e.target.value)} />
-                        <input type="date" placeholder="Date" value={newEventDate} onChange={e => setNewEventDate(e.target.value)} required="required"  />
-                        <select value={newEventTag} onChange={e => setNewEventTag(e.target.value)} required="required" >
-                            <option disabled="disabled">Tag</option>
-                            <option value="default">⚪️ Aucun</option>
-                            <option value="important">🔴 Important</option>
-                            <option value="blue">🔵 Bleu</option>
-                            <option value="green">🟢 Vert</option>
-                        </select>
+                            <Cta type="submit" text="Ajouter" icon="fas fa-check" />
+                        </form>
+                        :
+                        modalScreen === "edit" ?
+                        <>
+                            <p>Supprimer cet évènemenr entraînera sa perte sur l'entièrté de la planète, souhaitez-vous continuer ?</p>
 
-                        <Cta type="submit" text="Ajouter" icon="fas fa-check" />
-                    </form>
+                        </>
+                        :
+                        modalScreen === "delete" ?
+                        <>
+                            <p style={{ marginBottom:"1rem" }}>Supprimer cet évènement entraînera sa perte sur l'entièrté de la planète, souhaitez-vous continuer ?</p>
+                            <Cta type="button" text="Supprimer" icon="fas fa-trash-alt" onClick={() => handleDeleteEvent()} />
+                        </>
+                        :
+                        null
+                    }
 
                     {
                         error ?

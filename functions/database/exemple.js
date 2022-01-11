@@ -31,7 +31,7 @@ import { parseFirebaseDocs } from './../utils/dataparser'
 // Comme indiqué ci-haut, aucune fonction de ce document ne sera exportée
 
 // Permet d'obtenir tous les utilisateurs de la BDD
-export async function getUsersExemple() {
+async function getUsersExemple() {
 
     //await -> puisqu'on est en asynchrone on doit "attendre" les données
     //db -> référence à la bdd

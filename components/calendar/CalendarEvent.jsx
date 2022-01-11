@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { editEvent } from "../../functions/database/events";
 
-export default function CalendarEvent({ date, title, desc, tag, id, onMovedEvent }) {
+export default function CalendarEvent({ date, title, desc, tag, id, onDeleteEvent }) {
 
     useEffect(() => {
 
@@ -55,9 +55,9 @@ export default function CalendarEvent({ date, title, desc, tag, id, onMovedEvent
         if(!e.target.classList.contains('calendar-placeholder')) {
             // On appel la fonction pour edit la base de donnée
             editEvent(content.getAttribute('data-moving'), { date: e.target.closest('.calendar-day').getAttribute('data-date') })
-            .then(result => {
-                if(result === true) onMovedEvent()
-            })
+            // .then(result => {
+            //     if(result === true) onMovedEvent()
+            // })
         }
         // On enlève la classe à la note qui a bougé
         document.querySelector(`#calendar-event_${content.getAttribute('data-moving')}`).classList.remove('moving')
@@ -88,7 +88,9 @@ export default function CalendarEvent({ date, title, desc, tag, id, onMovedEvent
             <div className="calendar-event_head">
                 <div className="calendar-event_head-tag">{ tag }</div>
                 <div className="calendar-event_head-actions">
-                    <button type="button" className="calendar-event_head-action">
+                    <button type="button" className="calendar-event_head-action"
+                        onClick={() => onDeleteEvent(id)}
+                    >
                         <i className="fas fa-trash-alt"></i>
                     </button>
                     <button type="button" className="calendar-event_head-action"

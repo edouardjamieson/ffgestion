@@ -8,6 +8,11 @@ export default function CalendarEvent({ date, title, desc, tag, id, onMovedEvent
         window.addEventListener('mousemove', handleMoveDrag)
         window.addEventListener('mouseup', handleMoveUnpress)
 
+        return () => {
+            window.removeEventListener('mousemove', handleMoveDrag)
+            window.removeEventListener('mouseup', handleMoveUnpress)
+        }
+
     }, [])
 
     const handleMovePress = (e) => {
@@ -49,7 +54,7 @@ export default function CalendarEvent({ date, title, desc, tag, id, onMovedEvent
         // Si le target est un placeholder on cancel
         if(!e.target.classList.contains('calendar-placeholder')) {
             // On appel la fonction pour edit la base de donnée
-            editEvent(content.getAttribute('data-moving'), { date: e.target.getAttribute('data-date') })
+            editEvent(content.getAttribute('data-moving'), { date: e.target.closest('.calendar-day').getAttribute('data-date') })
             .then(result => {
                 if(result === true) onMovedEvent()
             })

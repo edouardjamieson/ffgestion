@@ -5,9 +5,10 @@ import CalendarHead from "../components/calendar/CalendarHead";
 import Cta from "../components/Cta";
 import Layout from "../components/Layout";
 import Modal from "../components/Modal";
-import { getMonthInFrench } from "../functions/utils/dataparser";
+import { getMonthInFrench, parseFirebaseDocs } from "../functions/utils/dataparser";
 import Error from '../components/Error'
 import { addEvent, getEvents } from "../functions/database/events";
+import { db } from "../functions/firebase";
 
 export default function Calendar() {
 
@@ -94,10 +95,19 @@ export default function Calendar() {
         // ====================================================================
         // Va chercher les events
         // ====================================================================
-        getEvents()
-        .then(events => setCalendarEvents(events))
-        .then(() => setLoading(false))
-        .then(() => setCalendarHeight())
+        // getEvents()
+        // .then(events => setCalendarEvents(events))
+        // .then(() => setLoading(false))
+        // .then(() => setCalendarHeight())
+        db.collection('events').onSnapshot(snap => {
+            const events = parseFirebaseDocs(snap.docs)
+            setCalendarEvents(events)
+            setLoading(false)
+            setCalendarHeight()
+
+
+        })
+
 
 
 
@@ -212,7 +222,7 @@ export default function Calendar() {
                         setModalVisible(true)
                     }}
                     onMovedEvent={() => {
-                        setMomentValue(moment())
+                        // setMomentValue(moment())
                     }}
                 />
             </div>

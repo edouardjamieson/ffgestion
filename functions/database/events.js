@@ -48,3 +48,19 @@ import { parseFirebaseDocs } from "../utils/dataparser";
     return query.id
 
 }
+
+// ====================================================================
+// Modifie un évènement dans le calendrier
+// ====================================================================
+/**
+ * Permet d'edit un event du calendrier
+ * @param id "Id de l'event à modifier"
+ * @param data "Objet des nouvelles données"
+ * @returns "Retourne true"
+ */
+export async function editEvent(id, data) {
+
+    const query = await db.collection('events').doc(id).update(data)
+    return true
+
+}

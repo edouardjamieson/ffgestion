@@ -311,7 +311,7 @@ nav.main-header_navigation {
 // ====================================================================
 // LE CALENDRIER
 // ====================================================================
-.calendar { width: 100%; flex-grow: 1; display: flex; flex-direction: column; }
+.calendar { width: 100%; flex-grow: 1; display: flex; flex-direction: column; pointer-events: none; }
 // picker
 .calendar-picker { display: flex; width: 100%; align-items: center; text-transform: uppercase; padding: 1rem;
   &_button { background-color: transparent; display: flex; align-items: center; border:none; gap: 0.5rem; cursor: pointer;
@@ -327,9 +327,9 @@ nav.main-header_navigation {
   &.weekend { width: calc(100% / 12); }
 }
 
-.calendar-content { width: 100%; flex-grow: 1; overflow-y: scroll; height: calc(var(--calendar-height) * 1px); }
+.calendar-content { width: 100%; flex-grow: 1; overflow-y: scroll; height: calc(var(--calendar-height) * 1px); pointer-events: all; }
 .calendar-month { width: 100%; display: flex; flex-wrap: wrap; margin-bottom: 2rem; border-bottom: 5px solid red; }
-.calendar-day { width: calc(100% / 12 * 2); border: 1px solid @color_gray; border-right: none; border-bottom: none; padding: 0.5rem; min-height: 150px;
+.calendar-day { width: calc(100% / 12 * 2); border: 1px solid @color_gray; border-right: none; border-bottom: none; padding: 0.5rem; min-height: 150px; pointer-events: all;
   &:nth-child(n + 7) { border-right: 1px solid @color_gray; }
   &.weekend { width: calc(100% / 12); }
   &.before-today { background-color: @color_lightgray; }
@@ -343,10 +343,10 @@ nav.main-header_navigation {
 
 .calendar-event { width: 100%; cursor: pointer; margin-top: 0.5rem;
   // TAGS
-  &.tag-important { background-color: @color_red; color: @color_white; }
-  &.tag-blue { background-color: @color_blue; color: @color_white; }
-  &.tag-green { background-color: @color_green; color: @color_white; }
-  &.tag-default { background-color: @color_lightgray; }
+  &[data-tag=important] { background-color: @color_red; color: @color_white; }
+  &[data-tag=blue] { background-color: @color_blue; color: @color_white; }
+  &[data-tag=green] { background-color: @color_green; color: @color_white; }
+  &[data-tag=default] { background-color: @color_lightgray; }
 
   // content
   &_head { background-color: fade(@color_black, 10%); padding: 0.5rem; display: flex; align-items: center; justify-content: space-between;
@@ -355,7 +355,14 @@ nav.main-header_navigation {
     &-tag { font-size: 0.8rem; color: fade(@color_black, 30%); font-size: 0.8rem; .g-bold }
   }
   &_body { padding: 0.5rem; }
+
+  &.moving { opacity: 0.2; }
+  &.ghost { position: absolute; z-index: 5; left: 0; top: 0; transform: translate(-105%, -10%); display: none; pointer-events: none; }
 }
+
+.calendar-content.moving-event { user-select: none; cursor: grab; pointer-events: none;
+  .calendar-event.ghost { display: block; cursor: grab; }
+} 
 
 // new event
 #calendar-event_new { display: flex; flex-direction: column;

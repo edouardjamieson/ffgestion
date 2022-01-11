@@ -4393,6 +4393,7 @@ nav.main-header_navigation a {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  pointer-events: none;
 }
 .calendar-picker {
   display: flex;
@@ -4444,6 +4445,7 @@ nav.main-header_navigation a {
   flex-grow: 1;
   overflow-y: scroll;
   height: calc(var(--calendar-height) * 1px);
+  pointer-events: all;
 }
 .calendar-month {
   width: 100%;
@@ -4459,6 +4461,7 @@ nav.main-header_navigation a {
   border-bottom: none;
   padding: 0.5rem;
   min-height: 150px;
+  pointer-events: all;
 }
 .calendar-day:nth-child(n + 7) {
   border-right: 1px solid #d4d4d4;
@@ -4500,19 +4503,19 @@ nav.main-header_navigation a {
   cursor: pointer;
   margin-top: 0.5rem;
 }
-.calendar-event.tag-important {
+.calendar-event[data-tag=important] {
   background-color: #f77777;
   color: #fff;
 }
-.calendar-event.tag-blue {
+.calendar-event[data-tag=blue] {
   background-color: #8EC4F3;
   color: #fff;
 }
-.calendar-event.tag-green {
+.calendar-event[data-tag=green] {
   background-color: #BDE29C;
   color: #fff;
 }
-.calendar-event.tag-default {
+.calendar-event[data-tag=default] {
   background-color: #ebebeb;
 }
 .calendar-event_head {
@@ -4541,6 +4544,27 @@ nav.main-header_navigation a {
 }
 .calendar-event_body {
   padding: 0.5rem;
+}
+.calendar-event.moving {
+  opacity: 0.2;
+}
+.calendar-event.ghost {
+  position: absolute;
+  z-index: 5;
+  left: 0;
+  top: 0;
+  transform: translate(-105%, -10%);
+  display: none;
+  pointer-events: none;
+}
+.calendar-content.moving-event {
+  user-select: none;
+  cursor: grab;
+  pointer-events: none;
+}
+.calendar-content.moving-event .calendar-event.ghost {
+  display: block;
+  cursor: grab;
 }
 #calendar-event_new {
   display: flex;

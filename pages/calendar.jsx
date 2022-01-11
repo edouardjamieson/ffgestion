@@ -189,7 +189,7 @@ export default function Calendar() {
 
     return (
         <Layout
-            title="Calendrier"
+            title={`Calendrier ${calendarYear}`}
             hasButton={true}
             buttonLabel="Ajouter un évènement"
             onButtonClick={() => setModalVisible(true)}
@@ -210,6 +210,9 @@ export default function Calendar() {
                     onQuickAdd={date => {
                         setNewEventDate(date)
                         setModalVisible(true)
+                    }}
+                    onMovedEvent={() => {
+                        setMomentValue(moment())
                     }}
                 />
             </div>

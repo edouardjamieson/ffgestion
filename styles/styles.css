@@ -4470,13 +4470,30 @@ nav.main-header_navigation a {
   background-color: #ebebeb;
 }
 .calendar-day_head {
-  text-align: right;
   font-family: 'GothamBlack', sans-serif;
   font-size: 1.5rem;
   color: #d4d4d4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.calendar-day_head button {
+  background-color: transparent;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #f77777;
+  opacity: 0;
 }
 .calendar-day.today > .calendar-day_head {
   color: #f77777;
+}
+.calendar-day:hover > .calendar-day_head > button {
+  opacity: 1;
+}
+.calendar-day.calendar-placeholder {
+  background-color: #ebebeb;
 }
 .calendar-event {
   width: 100%;
@@ -4490,6 +4507,13 @@ nav.main-header_navigation a {
 .calendar-event.tag-blue {
   background-color: #8EC4F3;
   color: #fff;
+}
+.calendar-event.tag-green {
+  background-color: #BDE29C;
+  color: #fff;
+}
+.calendar-event.tag-default {
+  background-color: #ebebeb;
 }
 .calendar-event_head {
   background-color: rgba(0, 0, 0, 0.1);

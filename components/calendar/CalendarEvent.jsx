@@ -9,6 +9,12 @@ export default function CalendarEvent({ date, title, desc, tag }) {
             case "blue":
                 classname += " tag-blue"
                 break;
+            case "green":
+                classname += " tag-green"
+                break;
+            case "default":
+                classname += " tag-default"
+                break;
         }
 
         return classname

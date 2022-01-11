@@ -21,6 +21,30 @@ import { parseFirebaseDocs } from "../utils/dataparser";
  export async function getEvents() {
 
     const query = await db.collection('events').get()
-    return parseFirebaseDocs(query)
+    if(query.empty) return []
+
+    return parseFirebaseDocs(query.docs)
+
+}
+
+// ====================================================================
+// Ajoute un évènement dans le calendrier
+// ====================================================================
+/**
+ * Permet d'ajouter un event dans le calendrier
+ * @returns "Retourne l'id du nouvel event"
+ */
+ export async function addEvent(data) {
+
+    const event = {
+        created_at: Date.now(),
+        title: data.title,
+        desc: data.desc,
+        date: data.date,
+        tag: data.tag
+    }
+
+    const query = await db.collection('events').add(event)
+    return query.id
 
 }

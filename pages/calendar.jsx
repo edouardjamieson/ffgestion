@@ -7,6 +7,7 @@ import Layout from "../components/Layout";
 import Modal from "../components/Modal";
 import { getMonthInFrench } from "../functions/utils/dataparser";
 import Error from '../components/Error'
+import { addEvent, getEvents } from "../functions/database/events";
 
 export default function Calendar() {
 
@@ -20,14 +21,14 @@ export default function Calendar() {
     const [calendarYear, setCalendarYear] = useState(2022)
 
     const [modalVisible, setModalVisible] = useState(false)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [validating, setValidating] = useState(false)
     const [error, setError] = useState("")
 
     const [newEventTitle, setNewEventTitle] = useState("")
     const [newEventDesc, setNewEventDesc] = useState("")
     const [newEventDate, setNewEventDate] = useState("")
-    const [newEventTag, setNewEventTag] = useState("")
+    const [newEventTag, setNewEventTag] = useState("default")
 
     let calendar_height = 0
     let calendar_scroll = 0
@@ -37,9 +38,6 @@ export default function Calendar() {
         // ====================================================================
         // Construit le calendrier
         // ====================================================================
-
-        // Détermine la hauteur du calendrier 
-        setCalendarHeight()
 
         const cal = {}
 
@@ -96,6 +94,10 @@ export default function Calendar() {
         // ====================================================================
         // Va chercher les events
         // ====================================================================
+        getEvents()
+        .then(events => setCalendarEvents(events))
+        .then(() => setLoading(false))
+        .then(() => setCalendarHeight())
 
 
 
@@ -134,6 +136,35 @@ export default function Calendar() {
         e.preventDefault()
         setValidating(true)
 
+        if(!newEventTitle.trim() || !newEventDate.trim() || !newEventTag.trim()) {
+            setValidating(false)
+            return setError("Certain champs son manquant.")
+        }
+
+        const newEvent = {
+            title: newEventTitle,
+            desc: newEventDesc ? newEventDesc : "",
+            date: moment(newEventDate).format('D/MM/YYYY'),
+            tag: newEventTag
+        }
+
+        addEvent(newEvent)
+        .then(id => {
+            const events = [...calendarEvents]
+            events.push({ id: id, data:newEvent })
+            setCalendarEvents(events)
+            setValidating(false)
+            setModalVisible(false)
+
+            //Reset le modal
+            setNewEventDate("")
+            setNewEventDesc("")
+            setNewEventTitle("")
+            setNewEventTag("")
+        })
+
+
+
     }
 
     // ====================================================================
@@ -163,6 +194,7 @@ export default function Calendar() {
             buttonLabel="Ajouter un évènement"
             onButtonClick={() => setModalVisible(true)}
             isValidating={validating}
+            isLoading={loading}
         >
 
 
@@ -175,6 +207,10 @@ export default function Calendar() {
                     onScroll={e => handleCalendarScroll(e)}
                     onBuiltToday={() => scrollToToday()}
                     events={calendarEvents}
+                    onQuickAdd={date => {
+                        setNewEventDate(date)
+                        setModalVisible(true)
+                    }}
                 />
             </div>
 
@@ -187,10 +223,10 @@ export default function Calendar() {
                 >
 
                     <form id="calendar-event_new" onSubmit={e => handleAddEvent(e)}>
-                        <input type="text" placeholder="Nom de l'évènement" value={newEventTitle} onChange={e => setNewEventTitle(e.target.value)} />
+                        <input type="text" placeholder="Nom de l'évènement" value={newEventTitle} onChange={e => setNewEventTitle(e.target.value)} required="required" />
                         <input type="text" placeholder="Description de l'évènement" value={newEventDesc} onChange={e => setNewEventDesc(e.target.value)} />
-                        <input type="date" placeholder="Date" value={newEventDate} onChange={e => setNewEventDate(e.target.value)} />
-                        <select value={newEventTag} onChange={e => setNewEventTag(e.target.value)}>
+                        <input type="date" placeholder="Date" value={newEventDate} onChange={e => setNewEventDate(e.target.value)} required="required"  />
+                        <select value={newEventTag} onChange={e => setNewEventTag(e.target.value)} required="required" >
                             <option disabled="disabled">Tag</option>
                             <option value="default">⚪️ Aucun</option>
                             <option value="important">🔴 Important</option>

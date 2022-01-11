@@ -1,6 +1,6 @@
 import CalendarEvent from "./CalendarEvent"
 
-export default function CalendarCell({ children, styles, date, events, placeholder }) {
+export default function CalendarCell({ children, styles, date, events, placeholder, onAddClick }) {
 
     // ====================================================================
     // PLACEHOLDER
@@ -18,16 +18,20 @@ export default function CalendarCell({ children, styles, date, events, placehold
         <div className={styles} data-date={date.format('D/MM/YYYY')}>
 
             <div className="calendar-day_head">
+                <button onClick={() => onAddClick(date.format('YYYY-MM-D'))}>
+                    <i className="fas fa-add"></i>
+                </button>
                 <span>{ date.format('D') }</span>
             </div>
 
             {
                 events.map(event =>
                     <CalendarEvent 
-                        date={event.date} 
-                        title={event.title}
-                        desc={event.desc}
-                        tag={event.tag}
+                        key={event.id}
+                        date={event.data.date} 
+                        title={event.data.title}
+                        desc={event.data.desc}
+                        tag={event.data.tag}
                     />)
             }
 

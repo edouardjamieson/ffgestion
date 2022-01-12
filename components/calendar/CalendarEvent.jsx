@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { editEvent } from "../../functions/database/events";
 
-export default function CalendarEvent({ date, title, desc, tag, id, onDeleteEvent }) {
+export default function CalendarEvent({ date, title, desc, tag, id, onDeleteEvent, onShowEvent }) {
 
     useEffect(() => {
 
@@ -55,9 +55,6 @@ export default function CalendarEvent({ date, title, desc, tag, id, onDeleteEven
         if(!e.target.classList.contains('calendar-placeholder')) {
             // On appel la fonction pour edit la base de donnée
             editEvent(content.getAttribute('data-moving'), { date: e.target.closest('.calendar-day').getAttribute('data-date') })
-            // .then(result => {
-            //     if(result === true) onMovedEvent()
-            // })
         }
         // On enlève la classe à la note qui a bougé
         document.querySelector(`#calendar-event_${content.getAttribute('data-moving')}`).classList.remove('moving')
@@ -100,7 +97,7 @@ export default function CalendarEvent({ date, title, desc, tag, id, onDeleteEven
                     </button>
                 </div>
             </div>
-            <p className="calendar-event_body">{ title }</p>
+            <p className="calendar-event_body" onClick={() => onShowEvent(id)}>{ title }</p>
         </div>
     )
 }

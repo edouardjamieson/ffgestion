@@ -1,6 +1,6 @@
 import CalendarEvent from "./CalendarEvent"
 
-export default function CalendarCell({ children, styles, date, events, placeholder, onAddClick, onDeleteEvent}) {
+export default function CalendarCell({ styles, date, events, placeholder, onAddClick, onDeleteEvent, onShowEvent}) {
 
     // ====================================================================
     // PLACEHOLDER
@@ -33,7 +33,8 @@ export default function CalendarCell({ children, styles, date, events, placehold
                         desc={event.data.desc}
                         tag={event.data.tag}
                         id={event.id}
-                        onDeleteEvent={(id) => onDeleteEvent(id)}
+                        onDeleteEvent={id => onDeleteEvent(id)}
+                        onShowEvent={id => onShowEvent(id)}
                     />)
             }
 

@@ -7,7 +7,7 @@ import Layout from "../components/Layout";
 import Modal from "../components/Modal";
 import { getMonthInFrench, parseFirebaseDocs } from "../functions/utils/dataparser";
 import Error from '../components/Error'
-import { addEvent, deleteEvent, getEvents } from "../functions/database/events";
+import { addEvent, deleteEvent, editEvent, getEvents } from "../functions/database/events";
 import { db } from "../functions/firebase";
 
 export default function Calendar() {
@@ -31,7 +31,9 @@ export default function Calendar() {
     const [newEventDesc, setNewEventDesc] = useState("")
     const [newEventDate, setNewEventDate] = useState("")
     const [newEventTag, setNewEventTag] = useState("default")
+
     const [deleteEventID, setDeleteEventID] = useState("")
+    const [displayEventID, setDisplayEventID] = useState("")
 
     let calendar_height = 0
     let calendar_scroll = 0
@@ -97,21 +99,12 @@ export default function Calendar() {
         // ====================================================================
         // Va chercher les events
         // ====================================================================
-        // getEvents()
-        // .then(events => setCalendarEvents(events))
-        // .then(() => setLoading(false))
-        // .then(() => setCalendarHeight())
         db.collection('events').onSnapshot(snap => {
             const events = parseFirebaseDocs(snap.docs)
             setCalendarEvents(events)
             setLoading(false)
             setCalendarHeight()
-
-
         })
-
-
-
 
         // Le useEffect est set sur le momentValue pcq on veut tout recalculer si la valeur
         // de moment() change (ex: changer de mois)
@@ -122,6 +115,10 @@ export default function Calendar() {
     // ====================================================================
 
     const handleCalendarScroll = (e) => {
+
+        // ====================================================================
+        // Permet de déterminer le mois courant
+        // ====================================================================
 
         const calendarElement = document.querySelector('.calendar-content')
         const calendarMonthElement = document.querySelector('.calendar-picker_current')
@@ -148,11 +145,13 @@ export default function Calendar() {
         e.preventDefault()
         setValidating(true)
 
+        // Si les champs sont vides on cancel
         if(!newEventTitle.trim() || !newEventDate.trim() || !newEventTag.trim()) {
             setValidating(false)
             return setError("Certain champs son manquant.")
         }
 
+        // On créer un objet avec les nouvelles données
         const newEvent = {
             title: newEventTitle,
             desc: newEventDesc ? newEventDesc : "",
@@ -160,6 +159,8 @@ export default function Calendar() {
             tag: newEventTag
         }
 
+        // On appel la fonction pour ajouter l'event
+        // On ajoute l'event dans le states des events
         addEvent(newEvent)
         .then(id => {
             const events = [...calendarEvents]
@@ -167,15 +168,11 @@ export default function Calendar() {
             setCalendarEvents(events)
             setValidating(false)
             setModalVisible(false)
-
-            //Reset le modal
-            setNewEventDate("")
-            setNewEventDesc("")
-            setNewEventTitle("")
-            setNewEventTag("")
+            
         })
 
-
+        // reset les states
+        resetCalendarStates()
 
     }
 
@@ -183,6 +180,7 @@ export default function Calendar() {
 
         setValidating(true)
 
+        // On delete l'event & reset le modal
         deleteEvent(deleteEventID)
         .then(() => {
             setValidating(false)
@@ -191,10 +189,60 @@ export default function Calendar() {
 
     }
 
+    const handleEditEvent = (e) => {
+        e.preventDefault()
+        setValidating(true)
+
+        // Si les valeurs importantes sont vides on cancel
+        if(!newEventTitle.trim() || !newEventDate.trim() || !newEventTag.trim()) {
+            setValidating(false)
+            return setError("Certain champs son manquant.")
+        }
+
+        // On va filter les events pour recup les infos
+        const event = calendarEvents.filter(evt => evt.id === displayEventID)[0]
+        
+        // On va ajouter à un objet ce qu'on a modifier
+        // Comme ça si on edit rien, on évite une requête inutile
+        const to_edit = {}
+
+        // On compare les nouvelles valeurs aux anciennes & si une est pas pareil on l'ajoute à l'objet
+        if(newEventTitle.trim() !== event.data.title) to_edit['title'] = newEventTitle.trim()
+        if(newEventDesc.trim() !== event.data.desc) to_edit['desc'] = newEventDesc.trim()
+        if(newEventTag !== event.data.tag) to_edit['tag'] = newEventTag
+        
+        const to_edit_date = moment(newEventDate).format('D/MM/YYYY')
+        if(to_edit_date !== event.data.date) to_edit['date'] = to_edit_date
+
+        if(Object.keys(to_edit).length > 0) {
+            editEvent(displayEventID, to_edit)
+            .then(() => {
+                setValidating(false)
+                setModalVisible(false)
+                resetCalendarStates()
+            })
+        }else{
+            setValidating(false)
+            setModalVisible(false)
+            resetCalendarStates()
+        }
+
+    }
+
+    const resetCalendarStates = () => {
+
+        // Permet de reset les states des inputs d'un nouvel event
+        setNewEventDate("")
+        setNewEventDesc("")
+        setNewEventTitle("")
+        setNewEventTag("")
+    }
+
     // ====================================================================
     // HELPERS
     // ====================================================================
     
+    // Permet de définir la hauteur du calendrier
     const setCalendarHeight = () => {
         calendar_height = window.innerHeight
         - document.querySelector('.main-header').clientHeight
@@ -216,7 +264,7 @@ export default function Calendar() {
             title={`Calendrier ${calendarYear}`}
             hasButton={true}
             buttonLabel="Ajouter un évènement"
-            onButtonClick={() => {setModalScreen("add"); setModalVisible(true)}}
+            onButtonClick={() => {resetCalendarStates(); setModalScreen("add"); setModalVisible(true)}}
             isValidating={validating}
             isLoading={loading}
         >
@@ -232,12 +280,30 @@ export default function Calendar() {
                     onBuiltToday={() => scrollToToday()}
                     events={calendarEvents}
                     onQuickAdd={date => {
+                        setModalScreen("add")
+                        resetCalendarStates()
                         setNewEventDate(date)
                         setModalVisible(true)
                     }}
-                    onDeleteEvent={(id) => {
+                    onDeleteEvent={id => {
                         setDeleteEventID(id)
                         setModalScreen("delete")
+                        setModalVisible(true)
+                    }}
+                    onShowEvent={id => {
+                        setDisplayEventID(id)
+
+                        // On va filter les events pour recup les infos
+                        const event = calendarEvents.filter(evt => evt.id === id)[0]
+                        
+                        // On set les states des inputs
+                        // Je réutilise ceux d'un nouvel events car ils sont identiques 
+                        setNewEventDesc(event.data.desc)
+                        setNewEventTitle(event.data.title)
+                        setNewEventTag(event.data.tag)
+                        setNewEventDate(moment(event.data.date, 'D/MM/YYYY').format('YYYY-MM-D'))
+
+                        setModalScreen("edit")
                         setModalVisible(true)
                     }}
                 />
@@ -251,7 +317,7 @@ export default function Calendar() {
                         modalScreen === "add" ?
                         "ajouter un évènement" :
                         modalScreen === "edit" ?
-                        "modifier cet évènement" :
+                        "évènement" :
                         modalScreen === "delete" ?
                         "supprimer cet évènement ?" : null
 
@@ -276,10 +342,20 @@ export default function Calendar() {
                         </form>
                         :
                         modalScreen === "edit" ?
-                        <>
-                            <p>Supprimer cet évènemenr entraînera sa perte sur l'entièrté de la planète, souhaitez-vous continuer ?</p>
+                        <form id="calendar-event_new" onSubmit={e => handleEditEvent(e)}>
+                            <input type="text" placeholder="Nom de l'évènement" value={newEventTitle} onChange={e => setNewEventTitle(e.target.value)} required="required" />
+                            <input type="text" placeholder="Description de l'évènement" value={newEventDesc} onChange={e => setNewEventDesc(e.target.value)} />
+                            <input type="date" placeholder="Date" value={newEventDate} onChange={e => setNewEventDate(e.target.value)} required="required"  />
+                            <select value={newEventTag} onChange={e => setNewEventTag(e.target.value)} required="required" >
+                                <option disabled="disabled">Tag</option>
+                                <option value="default">⚪️ Aucun</option>
+                                <option value="important">🔴 Important</option>
+                                <option value="blue">🔵 Bleu</option>
+                                <option value="green">🟢 Vert</option>
+                            </select>
 
-                        </>
+                            <Cta type="submit" text="Enregistrer" icon="fas fa-save" />
+                        </form>
                         :
                         modalScreen === "delete" ?
                         <>

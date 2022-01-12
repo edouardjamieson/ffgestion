@@ -280,23 +280,43 @@ nav.main-header_navigation {
 // ====================================================================
 // SINGLE D'UN PROJET
 // ====================================================================
-.single-project { width: 100%; display: flex; justify-content: space-between; }
+.single-project { width: 100%; display: flex; flex-direction: column; margin-top: 2rem; }
 .single-project_tasks { width: 60%;
   &-container { width: 100%; }
   #single-project_tasks { width: 100%; height: 50vh; border: 1px solid @color_gray; }
   .single-project_tasks-editor { position: absolute; bottom: 1px; background-color: fade(@color_black, 20%); color: @color_black; padding: 1rem; width: 100%; }
 }
-.single-project_infos { width: 35%;
-  &-banner { width: 100%; height: 300px; background-size: cover; background-position: center; }
-  &-container { width: 100%; background-color: @color_lightgray; padding: 1rem; margin-top: 1rem;
+.single-project_infos { width: 100%;
+  &-banner { width: 100%; height: 400px; background-size: cover; background-position: center; margin-bottom: 2rem; display: flex; }
+  &-container { width: 100%; padding: 1rem; margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; background: linear-gradient(transparent, fade(@color_black, 50%));
+    .single-project_infos-name { width: 100%; background-color: transparent; padding: 0; border:none; .g-bold; color: @color_white; font-size: 3rem; }
     h4 { width: 100%; border-bottom: 2px solid @color_gray; padding-bottom: 0.5rem; }
-    p { margin-top: 1rem; }
     .cta { margin-top: 1rem; margin-left: auto; }
     .input-container { display: flex; flex-direction: column; margin-top: 1rem;
       span { font-family: @font_emphasis; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.5rem; }
     }
   }
 }
+
+// KANBAN
+.single-project_kanban { width: 100%; margin-bottom: 2rem;
+  &-head { width: 100%; display: flex; align-items: center; justify-content: space-between; }
+  &-rows { display: flex; margin-top: 1rem; gap: 1rem; }
+  &-row { width: 100%; background: @color_lightgray; padding: 1rem; border-top: 5px solid @color_red; }
+  &-empty { width: 100%; display: flex; align-items: center; justify-content: center; padding: 5rem 1rem; background-color: @color_lightgray; }
+}
+.single-project_kanban-row_head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;
+  span { font-family: @font_emphasis; font-size: 1.2rem; }
+  button { background-color: transparent; border: none; padding: 0; font-size: 1.2rem; color: @color_red; cursor: pointer; }
+}
+
+.single-project_kanban-row_tasks { width: 100%; display: flex; flex-direction: column; }
+.single-project_kanban-row_task { width: 100%; background-color: @color_white; padding: 0.5rem; margin-bottom: 1rem;
+  p { font-size: 1rem; margin-bottom: 0.5rem; }
+  span { .g-bold; font-size: 0.8rem; color: @color_gray; }
+}
+
+#single-project_new-column { display: flex; flex-direction: column; .cta { margin-left: auto; margin-top: 1rem; } }
 
 /***
  *     ######     ###    ##       ######## ##    ## ########     ###    ########  

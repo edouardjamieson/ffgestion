@@ -70,6 +70,8 @@ export default function CalendarEvent({ date, title, desc, tag, id, onDeleteEven
         const content = document.querySelector('.calendar-content')
         const ghost = document.querySelector('.ghost')
 
+        if(!content || !ghost) return
+
         if(content.classList.contains('moving-event')) {
 
             const offset = window.innerHeight - document.documentElement.style.getPropertyValue('--calendar-height')

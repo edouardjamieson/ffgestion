@@ -1,6 +1,7 @@
 import { parseFirebaseDocs, parseFirebaseDoc } from '../utils/dataparser'
 import { slugify } from '../utils/string'
 import { db, fields, storage } from './../firebase'
+import { getAuthID } from './users'
 /***
  *    ########  ########   #######        ## ########  ######  ########  ######  
  *    ##     ## ##     ## ##     ##       ## ##       ##    ##    ##    ##    ## 
@@ -63,7 +64,9 @@ export async function getProject(id) {
         slug: slugify(data.name),
         image: image_url,
         created_at: Date.now(),
-        tasks: ""
+        tasks: "",
+        occupiedBy: null,
+        kanban_columns: []
     }
 
     const query = await db.collection('projects').add(project)
@@ -82,5 +85,28 @@ export async function getProject(id) {
 export async function editProject(project_id, data) {
 
     const query = await db.collection('projects').doc(project_id).update(data)
+
+}
+
+// ====================================================================
+// Ajoute une colonne dans le kanban d'un projet
+// ====================================================================
+/**
+ * Permet d'ajouter une colonne dans le kanban d'un projet
+ * @param project_id "id du projet"
+ * @param column_name "Nom de la nouvelle colonne"
+ * @returns "Retourne l'id de la nouvelle entrée"
+ */
+export async function addKanbanColumn(project_id, column_name) {
+
+    const column = {
+        name: column_name,
+        created_at: Date.now(),
+        created_by: getAuthID(),
+        tasks: []
+    }
+
+    const query = await db.collection('projects').doc(project_id).collection('columns').add(column)
+    return query.id
 
 }

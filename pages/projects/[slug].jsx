@@ -9,9 +9,11 @@ import { db } from "../../functions/firebase"
 import { parseFirebaseDocs } from "../../functions/utils/dataparser"
 import Error from "../../components/Error"
 import { slugify } from "../../functions/utils/string"
-import { editProject } from "../../functions/database/projects"
+import { addKanbanColumn, editProject } from "../../functions/database/projects"
 import { useRouter } from "next/router"
 import { getAuthID, getUserByID } from "../../functions/database/users"
+import KanbanBody from "../../components/kanban/KanbanBody"
+import Modal from "../../components/Modal"
 
 // Permet d'aller pre-fetch les informations d'un projet avant de construire la page
 export async function getServerSideProps(context) {
@@ -53,6 +55,15 @@ export default function SingleProject(project) {
     const SyncTimeout = useRef(null)
     const FocusTimeout = useRef(null)
     const TextArea = useRef(null)
+    
+    // STATES POUR LE KANBAN
+    const [kanban, setKanban] = useState([])
+    const [newColumnName, setNewColumnName] = useState("")
+
+    // STATES POUR LE MODAL
+    const [modalScreen, setModalScreen] = useState("column")
+    const [modalVisible, setModalVisible] = useState(false)
+    const [modalError, setModalError] = useState("")
 
     const [error, setError] = useState("")
     const [validating, setValidating] = useState(false)
@@ -86,6 +97,20 @@ export default function SingleProject(project) {
             if(snap.data().occupiedBy === getAuthID()) {
                 TextArea.current.focus()
             }
+
+        })
+
+        // On démarre un live session pour le kanban
+        db.collection('projects').doc(project.id).collection('columns').onSnapshot(snap => {
+            
+            // ====================================================================
+            // Ce code est appelé chaque fois qu'il y a un changement dans le kanban
+            // ====================================================================
+
+            // Update le state du kanban
+            const kanban = parseFirebaseDocs(snap.docs)
+            setKanban(kanban)
+
         })
 
         window.onbeforeunload = () => {
@@ -151,6 +176,24 @@ export default function SingleProject(project) {
 
     }
 
+    const handleCreateColumn = (e) => {
+        e.preventDefault()
+        setValidating(true)
+
+        if(!newColumnName.trim()) {
+            setValidating(false)
+            return setModalError("Veuillez entrer un nom pour la colonne.")
+        }
+
+        addKanbanColumn(project.id, newColumnName)
+        .then(() => {
+            setValidating(false)
+            setModalVisible(false)
+            setNewColumnName("")
+        })
+
+    }
+
 
     // ====================================================================
     // Fonction pour update la configuration du projet
@@ -191,13 +234,34 @@ export default function SingleProject(project) {
 
     return (
         <Layout
-            title={configName ? configName : "mon projet"}
-            hasButton={true}
-            buttonLabel="Ajouter une tâche"
             isValidating={validating}
         >
 
             <div className="single-project">
+
+                
+
+                <div className="single-project_infos">
+
+                    <div className="single-project_infos-banner" style={{ backgroundImage: `url(${project.data.image})` }}>
+                        <div className="single-project_infos-container">
+                            <input className="single-project_infos-name" type="text" value={configName} onChange={e => setConfigName(e.target.value)} placeholder="Nom du projet" />
+                            {
+                                configName !== project.data.name ?
+                                <Cta type="button" icon="fas fa-save" text="Sauvegarder" onClick={() => handleUpdateConfig()} /> : null
+                            }
+                        </div>
+                    </div>
+
+                </div>
+
+                <KanbanBody
+                    kanban={kanban}
+                    onNewColumn={() => {
+                        setModalScreen("column")
+                        setModalVisible(true)
+                    }}
+                />
 
                 <div className="single-project_tasks">
 
@@ -220,34 +284,39 @@ export default function SingleProject(project) {
 
                 </div>
 
-                <div className="single-project_infos">
-
-                    <div className="single-project_infos-banner" style={{ backgroundImage: `url(${project.data.image})` }}></div>
-                    <div className="single-project_infos-container">
-                        <h4>Configuration</h4>
-                        <div className="input-container">
-                            <span>Nom du projet</span>
-                            <input type="text" value={configName} onChange={e => setConfigName(e.target.value)} placeholder="Nom du projet" />
-                        </div>
-
-                        {
-                            configName !== project.data.name ?
-                            <Cta type="button" icon="fas fa-save" text="Sauvegarder" onClick={() => handleUpdateConfig()} /> : null
-                        }
-
-                    </div>
-
-                    <div className="single-project_infos-container">
-                        <h4>Informations</h4>
-                        {/* <p>Le projet <b>{ configName }</b> a été créé le { new Date(project.data.created_at).toLocaleDateString() } par <b>admin</b></p> */}
-                    </div>
-
-                </div>
-
             </div>
 
             {
                 error ? <Error text={error} onDismiss={() => setError("")} /> : null
+            }
+
+            {
+                modalVisible ?
+                <Modal
+                    title={
+                        modalScreen === "column" ?
+                        "Ajouter une colonne" :
+                        modalScreen === "task" ?
+                        "Ajouter une tâche" : null
+                    }
+                    onExit={() => setModalVisible(false)}
+                >
+
+                    {
+                        modalScreen === "column" ?
+                        <form onSubmit={e => handleCreateColumn(e)} id="single-project_new-column">
+                            <input type="text" placeholder="Nom de la nouvelle colonne" value={newColumnName} onChange={e => setNewColumnName(e.target.value)} />
+                            <Cta type="submit" text="Ajouter" />
+                        </form>
+                        : null
+                    }
+
+                    {
+                        modalError ? <Error text={modalError} onDismiss={() => setModalError("")} /> : null
+                    }
+
+                </Modal>
+                : null
             }
 
         </Layout>

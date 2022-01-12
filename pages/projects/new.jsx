@@ -35,7 +35,7 @@ export default function NewProject() {
         //Regarde si l'image est une image
         if(!checkIfImage(type, [])) return setError("Ce type de fichier n'est pas autorisé comme image de projet.")
         // Regarde si l'image est trop lourde
-        if(size > 1000000) return setError("Cette image est trop lourde!")
+        if(size > 100000000) return setError("Cette image est trop lourde!")
 
         //Tout est good on peut setup le state de preview & le state pour le fichier de l'image
         setProjectImagePreview(URL.createObjectURL(image))

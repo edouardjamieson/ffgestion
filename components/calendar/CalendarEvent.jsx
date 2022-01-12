@@ -85,6 +85,12 @@ export default function CalendarEvent({ date, title, desc, tag, id, onDeleteEven
             <div className="calendar-event_head">
                 <div className="calendar-event_head-tag">{ tag }</div>
                 <div className="calendar-event_head-actions">
+                    
+                    <button type="button" className="calendar-event_head-action"
+                        onClick={() => onShowEvent(id)}
+                    >
+                        <i className="fas fa-pen"></i>
+                    </button>
                     <button type="button" className="calendar-event_head-action"
                         onClick={() => onDeleteEvent(id)}
                     >
@@ -97,7 +103,7 @@ export default function CalendarEvent({ date, title, desc, tag, id, onDeleteEven
                     </button>
                 </div>
             </div>
-            <p className="calendar-event_body" onClick={() => onShowEvent(id)}>{ title }</p>
+            <p className="calendar-event_body">{ title }</p>
         </div>
     )
 }

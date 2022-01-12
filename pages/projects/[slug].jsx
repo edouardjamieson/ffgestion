@@ -237,6 +237,7 @@ export default function SingleProject(project) {
             setModalVisible(false)
             setValidating(false)
             setNewTaskContent("")
+            setNewTaskFile(null)
             setNewTaskFileName("Lier un fichier à la tâche")
         })
 

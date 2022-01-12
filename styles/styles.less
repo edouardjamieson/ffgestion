@@ -313,9 +313,11 @@ nav.main-header_navigation {
 .single-project_kanban-row_tasks { width: 100%; display: flex; flex-direction: column; max-height: 600px; overflow: scroll; }
 .single-project_kanban-row_task { width: 100%; background-color: @color_white; padding: 0.5rem; margin-bottom: 1rem;
   p { font-size: 1rem; margin-bottom: 0.5rem; }
-  &-footer { display: flex; align-items: center; justify-content: space-between }
-  &-file { font-size: 1rem; color: @color_red }
-  span { .g-bold; font-size: 0.8rem; color: @color_gray; }
+  &-footer { display: flex; align-items: flex-end; }
+  &-icon { font-size: 1rem; color: @color_red; margin-left: 0.5rem; }
+  span { .g-bold; font-size: 0.8rem; color: @color_gray; margin-right: auto; }
+
+  &.ghost { position: absolute; top: 0; left: 0; }
 }
 
 #single-project_new-form { display: flex; flex-direction: column;

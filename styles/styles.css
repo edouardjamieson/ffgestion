@@ -4458,17 +4458,23 @@ nav.main-header_navigation a {
 }
 .single-project_kanban-row_task-footer {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: flex-end;
 }
-.single-project_kanban-row_task-file {
+.single-project_kanban-row_task-icon {
   font-size: 1rem;
   color: #f77777;
+  margin-left: 0.5rem;
 }
 .single-project_kanban-row_task span {
   font-family: 'GothamBlack', sans-serif;
   font-size: 0.8rem;
   color: #d4d4d4;
+  margin-right: auto;
+}
+.single-project_kanban-row_task.ghost {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 #single-project_new-form {
   display: flex;

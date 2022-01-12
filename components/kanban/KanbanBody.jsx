@@ -22,7 +22,8 @@ export default function KanbanBody({ kanban, onNewColumn, onAddTask }) {
                     </div>
                 }
             
-            </div>                    
+            </div>         
+            <div className="single-project_kanban-row_task ghost">yo</div>
 
         </div>
     )

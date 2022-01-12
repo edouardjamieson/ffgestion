@@ -1,9 +1,7 @@
 import Cta from "../Cta";
 import KanbanColumn from "./KanbanColumn";
 
-export default function KanbanBody({ kanban, onNewColumn }) {
-
-    console.log(kanban);
+export default function KanbanBody({ kanban, onNewColumn, onAddTask }) {
 
     return (
         <div className="single-project_kanban">
@@ -17,7 +15,7 @@ export default function KanbanBody({ kanban, onNewColumn }) {
 
                 { 
                     kanban.length > 0 ?
-                    kanban.map(column => <KanbanColumn column={column} key={column.id} />)
+                    kanban.map(column => <KanbanColumn column={column} key={column.id} onAddTask={id => onAddTask(id)} />)
                     :
                     <div className="single-project_kanban-empty">
                         <p>Aucune colonne trouvée! Cliquez sur  "Ajouter une colonne" pour en créer une.</p>

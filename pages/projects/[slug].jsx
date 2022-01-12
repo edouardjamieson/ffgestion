@@ -8,8 +8,8 @@ import Layout from "../../components/Layout"
 import { db } from "../../functions/firebase"
 import { parseFirebaseDocs } from "../../functions/utils/dataparser"
 import Error from "../../components/Error"
-import { slugify } from "../../functions/utils/string"
-import { addKanbanColumn, editProject } from "../../functions/database/projects"
+import { sanitizeFileName, slugify } from "../../functions/utils/string"
+import { addKanbanColumn, addKanbanTask, editProject } from "../../functions/database/projects"
 import { useRouter } from "next/router"
 import { getAuthID, getUserByID } from "../../functions/database/users"
 import KanbanBody from "../../components/kanban/KanbanBody"
@@ -59,6 +59,10 @@ export default function SingleProject(project) {
     // STATES POUR LE KANBAN
     const [kanban, setKanban] = useState([])
     const [newColumnName, setNewColumnName] = useState("")
+    const [newTaskColumnID, setNewTaskColumnID] = useState("")
+    const [newTaskContent, setNewTaskContent] = useState("")
+    const [newTaskFile, setNewTaskFile] = useState(null)
+    const [newTaskFileName, setNewTaskFileName] = useState("Lier un fichier à la tâche")
 
     // STATES POUR LE MODAL
     const [modalScreen, setModalScreen] = useState("column")
@@ -194,6 +198,50 @@ export default function SingleProject(project) {
 
     }
 
+    const handleUploadTaskFile = (document) => {
+        const file = document
+        const type = file.type
+        const size = file.size
+        const name = sanitizeFileName(file.name)
+
+        // Regarde si le fichier est trop lourde
+        if(size > 100000000) return setModalError("Ce fichier est trop lourd.")
+
+        //J'utilise le FileReader pour obtenir le fichier en base64
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => {
+            setNewTaskFile(reader.result)
+            setNewTaskFileName(name)
+        }
+
+    }
+
+    const handleCreateTask = (e) => {
+        e.preventDefault()
+        setValidating(true)
+
+        if(!newTaskContent.trim()) {
+            setValidating(false)
+            return setModalError("Veuillez entrer un contenu pour la nouvelle tâche.")
+        }
+
+        const task = {
+            content: newTaskContent,
+            base64: newTaskFile,
+            file_name: newTaskFileName  
+        }
+
+        addKanbanTask(project.id, newTaskColumnID, task)
+        .then(() => {
+            setModalVisible(false)
+            setValidating(false)
+            setNewTaskContent("")
+            setNewTaskFileName("Lier un fichier à la tâche")
+        })
+
+    }
+
 
     // ====================================================================
     // Fonction pour update la configuration du projet
@@ -261,6 +309,11 @@ export default function SingleProject(project) {
                         setModalScreen("column")
                         setModalVisible(true)
                     }}
+                    onAddTask={column_id => {
+                        setNewTaskColumnID(column_id)
+                        setModalScreen("task")
+                        setModalVisible(true)
+                    }}
                 />
 
                 <div className="single-project_tasks">
@@ -304,8 +357,18 @@ export default function SingleProject(project) {
 
                     {
                         modalScreen === "column" ?
-                        <form onSubmit={e => handleCreateColumn(e)} id="single-project_new-column">
+                        <form onSubmit={e => handleCreateColumn(e)} id="single-project_new-form">
                             <input type="text" placeholder="Nom de la nouvelle colonne" value={newColumnName} onChange={e => setNewColumnName(e.target.value)} />
+                            <Cta type="submit" text="Ajouter" />
+                        </form>
+                        :
+                        modalScreen === "task" ?
+                        <form onSubmit={e => handleCreateTask(e)} id="single-project_new-form">
+                            <textarea value={newTaskContent} onChange={e => setNewTaskContent(e.target.value)} placeholder="Contenu de la nouvelle tâche"></textarea>
+                            <input onChange={e => handleUploadTaskFile(e.target.files[0])} type="file" id="new-task-file" />
+                            <label htmlFor="new-task-file" className="single-project_new-form_label">
+                                <span>{ newTaskFileName }</span>
+                            </label>
                             <Cta type="submit" text="Ajouter" />
                         </form>
                         : null

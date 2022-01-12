@@ -301,7 +301,7 @@ nav.main-header_navigation {
 // KANBAN
 .single-project_kanban { width: 100%; margin-bottom: 2rem;
   &-head { width: 100%; display: flex; align-items: center; justify-content: space-between; }
-  &-rows { display: flex; margin-top: 1rem; gap: 1rem; }
+  &-rows { display: flex; margin-top: 1rem; gap: 1rem; align-items: flex-start; }
   &-row { width: 100%; background: @color_lightgray; padding: 1rem; border-top: 5px solid @color_red; }
   &-empty { width: 100%; display: flex; align-items: center; justify-content: center; padding: 5rem 1rem; background-color: @color_lightgray; }
 }
@@ -310,13 +310,20 @@ nav.main-header_navigation {
   button { background-color: transparent; border: none; padding: 0; font-size: 1.2rem; color: @color_red; cursor: pointer; }
 }
 
-.single-project_kanban-row_tasks { width: 100%; display: flex; flex-direction: column; }
+.single-project_kanban-row_tasks { width: 100%; display: flex; flex-direction: column; max-height: 600px; overflow: scroll; }
 .single-project_kanban-row_task { width: 100%; background-color: @color_white; padding: 0.5rem; margin-bottom: 1rem;
   p { font-size: 1rem; margin-bottom: 0.5rem; }
+  &-footer { display: flex; align-items: center; justify-content: space-between }
+  &-file { font-size: 1rem; color: @color_red }
   span { .g-bold; font-size: 0.8rem; color: @color_gray; }
 }
 
-#single-project_new-column { display: flex; flex-direction: column; .cta { margin-left: auto; margin-top: 1rem; } }
+#single-project_new-form { display: flex; flex-direction: column;
+  .cta { margin-left: auto; margin-top: 1rem; }
+  #new-task-file { display: none; }
+  .single-project_new-form_label { width: 100%; padding: 1rem; border: 3px dashed @color_red; text-align: center; margin-top: 1rem; cursor: pointer; }
+  textarea { height: 300px; }
+}
 
 /***
  *     ######     ###    ##       ######## ##    ## ########     ###    ########  

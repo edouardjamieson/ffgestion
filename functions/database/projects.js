@@ -110,3 +110,57 @@ export async function addKanbanColumn(project_id, column_name) {
     return query.id
 
 }
+
+// ====================================================================
+// Ajoute une tâche dans le kanban d'un projet
+// ====================================================================
+/**
+ * Permet d'ajouter une tâche dans le kanban d'un projet
+ * @param project_id "id du projet"
+ * @param column_id "id de la colonne"
+ * @param data "Objet contenant les infos de la tâche"
+ * @returns "Retourne l'id de la nouvelle entrée"
+ */
+export async function addKanbanTask(project_id, column_id, data) {
+
+    // Si on a un fichier on l'upload
+    let task_file = null
+    if(data.base64) {
+        const upload = await storage
+        .ref(`/images/projects/kanban/${data.file_name}`)
+        .putString(data.base64, 'data_url')
+
+        task_file = await upload.ref.getDownloadURL()
+    }
+
+    // Ajoute la tâche dans la table des tâches kanban
+    const task = {
+        content: data.content,
+        file: task_file,
+        created_at: Date.now(),
+        created_by: getAuthID()
+    }
+    const kanban_query = await db.collection('kanban').add(task)
+
+    // Ajoute l'id de la tâche dans notre colonne
+    const project_query = await db.collection('projects').doc(project_id)
+        .collection('columns').doc(column_id).update({
+            tasks: fields.arrayUnion(kanban_query.id)
+        })
+
+}
+
+// ====================================================================
+// Récupère les tâches par leur id
+// ====================================================================
+/**
+ * Permet de récupèrer des tâches
+ * @param ids "Array contenant les IDs des tâches à aller chercher"
+ * @returns "Retourne un objet contenant les contenus des tâches"
+ */
+export async function getTasksByID(ids) {
+
+    const query = await db.collection('kanban').where('__name__', 'in', ids).get()
+    return parseFirebaseDocs(query.docs)
+
+}

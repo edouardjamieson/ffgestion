@@ -2,7 +2,7 @@ import moment from "moment";
 import { useEffect } from "react";
 import { moveKanbanTask } from "../../functions/database/projects";
 
-export default function KanbanTask({ task, column_id, onClickTask }) {
+export default function KanbanTask({ task, i, column_id, onClickTask }) {
 
     useEffect(() => {
     
@@ -29,6 +29,7 @@ export default function KanbanTask({ task, column_id, onClickTask }) {
         // On ajoute la classe & set l'event qu'on bouge
         kanban.classList.add('moving-task')
         kanban.setAttribute('data-moving', task.id)
+        kanban.setAttribute('data-column', column_id)
 
         // On met le html du ghost comme celui de l'event à bouger & on met le tag
         ghost.innerHTML = document.querySelector(`#kanban-task_${task.id}`).innerHTML
@@ -52,12 +53,14 @@ export default function KanbanTask({ task, column_id, onClickTask }) {
         // Si on est pas en train de bouger on cancel
         if(!kanban.classList.contains('moving-task')) return
 
-        // Si on est sur un colonne on call la function pour changer la tâche de colonne
-        if(e.target.hasAttribute('data-column-id')) {
+        // Si on est sur une dropzone on call la function pour changer la tâche de colonne
+        if(e.target.classList.contains('single-project_kanban-dropzone')) {
             moveKanbanTask(
                 document.querySelector('.single-project').getAttribute('data-project-id'),
                 kanban.getAttribute('data-moving'),
-                e.target.getAttribute('data-column-id')
+                kanban.getAttribute('data-column'),
+                e.target.closest('.single-project_kanban-row').getAttribute('data-column-id'),
+                e.target.getAttribute('data-position')
             )
         }
 
@@ -67,8 +70,10 @@ export default function KanbanTask({ task, column_id, onClickTask }) {
         // On enlève les infos de mouvement
         kanban.classList.remove('moving-task')
         kanban.removeAttribute('data-moving')
-        if(document.querySelector('.single-project_kanban-row.row-active')) {
-            document.querySelector('.single-project_kanban-row.row-active').classList.remove('row-active')
+        kanban.removeAttribute('data-column')
+
+        if(document.querySelector('.single-project_kanban-dropzone.active')) {
+            document.querySelector('.single-project_kanban-dropzone.active').classList.remove('active')
         }
     }
 
@@ -84,15 +89,15 @@ export default function KanbanTask({ task, column_id, onClickTask }) {
             ghost.style.top = e.clientY + window.scrollY - ghost.clientHeight + "px"
             ghost.style.left = e.clientX + "px"
 
-            // Permet d'indiquer la colonne sur laquelle on va drop
-            if(e.target.classList.contains('single-project_kanban-row')) {
-                if(document.querySelector('.single-project_kanban-row.row-active')) {
-                    document.querySelector('.single-project_kanban-row.row-active').classList.remove('row-active')
+            // Permet d'indiquer sur quelle dropzone on va drop
+            if(e.target.classList.contains('single-project_kanban-dropzone')) {
+                if(document.querySelector('.single-project_kanban-dropzone.active')) {
+                    document.querySelector('.single-project_kanban-dropzone.active').classList.remove('active')
                 }
-                e.target.classList.add('row-active')
+                e.target.classList.add('active')
             }else{
-                if(document.querySelector('.single-project_kanban-row.row-active')) {
-                    document.querySelector('.single-project_kanban-row.row-active').classList.remove('row-active')
+                if(document.querySelector('.single-project_kanban-dropzone.active')) {
+                    document.querySelector('.single-project_kanban-dropzone.active').classList.remove('active')
                 }
             }
         }
@@ -100,20 +105,23 @@ export default function KanbanTask({ task, column_id, onClickTask }) {
     }
 
     return (
-        <div className="single-project_kanban-row_task" id={`kanban-task_${task.id}`} onClick={() => onClickTask(task)}>
-            <p>{ task.data.content }</p>
-            <div className="single-project_kanban-row_task-footer">
-                <span>Ajouté le { moment(task.data.created_at).format('D/MM/YYYY') }</span>
-                {
-                    task.data.file ?
-                    <div className="single-project_kanban-row_task-icon">
-                        <i className="fas fa-paperclip"></i>
-                    </div> : null
-                }
-                <div className="single-project_kanban-row_task-icon" onMouseDown={e => handleMovePress(e)}>
-                    <i className="fas fa-arrows"></i>
+        <>
+            <div className="single-project_kanban-dropzone" data-task={task.id} data-position={i}></div>
+            <div className="single-project_kanban-row_task" id={`kanban-task_${task.id}`} onClick={() => onClickTask(task)}>
+                <p>{ task.data.content }</p>
+                <div className="single-project_kanban-row_task-footer">
+                    <span>Ajouté le { moment(task.data.created_at).format('D/MM/YYYY') }</span>
+                    {
+                        task.data.file ?
+                        <div className="single-project_kanban-row_task-icon">
+                            <i className="fas fa-paperclip"></i>
+                        </div> : null
+                    }
+                    <div className="single-project_kanban-row_task-icon" onMouseDown={e => handleMovePress(e)}>
+                        <i className="fas fa-arrows"></i>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }

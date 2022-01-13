@@ -175,24 +175,24 @@ export async function getTasksByID(ids) {
  * @param new_column_id "ID de la nouvelle colonne"
  * @returns "Retourne true"
  */
-export async function moveKanbanTask(project_id, task_id, new_column_id) {
+export async function moveKanbanTask(project_id, task_id, old_column_id, new_column_id, position) {
 
-    // Récupère la colonne qui contient la tâche
-    const old_column_query = await db.collection('projects').doc(project_id).collection('columns').where('tasks', 'array-contains', task_id).get()
-    const old_column_id = old_column_query.docs[0].id
-
-    if(old_column_id === new_column_id) return true
-
-    // On enlève la tâche de cette colonne
+    // On enlève la tâche de la colonne courante
     const task_query = await db.collection('projects').doc(project_id).collection('columns').doc(old_column_id).update({
         tasks: fields.arrayRemove(task_id)
     })
 
-    // On ajoute la tâche à la nouvelle colonne
-    const new_column_query = await db.collection('projects').doc(project_id).collection('columns').doc(new_column_id).update({
-        tasks: fields.arrayUnion(task_id)
+    // On récupère les tâches de la nouvelles colonnes
+    const new_column_tasks_query = await db.collection('projects').doc(project_id).collection('columns').doc(new_column_id).get()
+    const new_column_tasks = parseFirebaseDoc(new_column_tasks_query).data.tasks
+
+    // On insert l'id de la tâche à sa nouvelle position
+    new_column_tasks.splice(position, 0, task_id)
+    
+    // On update les tâches de la colonne
+    const update_tasks_query = await db.collection('projects').doc(project_id).collection('columns').doc(new_column_id).update({
+        tasks: new_column_tasks
     })
 
     return true
-
 }

@@ -13,8 +13,11 @@ export default function KanbanColumn({ column, onAddTask, onClickTask }) {
         if(column.data.tasks.length > 0) {
             getTasksByID(column.data.tasks)
             .then(docs => {
-                const ordered = docs.sort((a,b) => b.data.created_at - a.data.created_at)
-                setTasks(ordered)
+
+                const t = []
+                column.data.tasks.forEach(val => t.push(docs.filter(doc => doc.id === val)[0]))
+                // const ordered = docs.sort((a,b) => b.data.created_at - a.data.created_at)
+                setTasks(t)
             })
         }else{
             setTasks([])
@@ -36,11 +39,12 @@ export default function KanbanColumn({ column, onAddTask, onClickTask }) {
             <div className="single-project_kanban-row_tasks">
                 {
                     tasks.length > 0 ?
-                    tasks.map(task => 
+                    tasks.map((task, i) => 
                     <KanbanTask
-                        task={task}
                         key={task.id}
+                        task={task}
                         column_id={column.id}
+                        i={i}
                         onClickTask={task => onClickTask(task)}
                     />)
                     :

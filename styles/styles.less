@@ -307,8 +307,10 @@ nav.main-header_navigation {
 
   &.moving-task { user-select: none; cursor: grab; pointer-events: none;
     .ghost { display: block; cursor: grab; }
-    .single-project_kanban-row { pointer-events: all; }
+    .single-project_kanban-row { pointer-events: none; }
     .single-project_kanban-row * { pointer-events: none; }
+    .single-project_kanban-row .single-project_kanban-dropzone { pointer-events: all; }
+
   }
 
   &-row.row-active { border: 5px solid @color_red; }
@@ -319,7 +321,10 @@ nav.main-header_navigation {
 }
 
 .single-project_kanban-row_tasks { width: 100%; display: flex; flex-direction: column; max-height: 600px; overflow: scroll; }
-.single-project_kanban-row_task { width: 100%; background-color: @color_white; padding: 0.5rem; margin-bottom: 1rem;
+.single-project_kanban-dropzone { width: 100%; height: 1rem; display: flex; align-items: center; justify-content: center;
+  &.active { height: 2rem; &::after { content:""; width: 90%; height: 2px; display: block; background-color: @color_gray; } }
+}
+.single-project_kanban-row_task { width: 100%; background-color: @color_white; padding: 0.5rem;
   p { font-size: 1rem; margin-bottom: 0.5rem; }
   &-footer { display: flex; align-items: flex-end; }
   &-icon { font-size: 1rem; color: @color_red; margin-left: 0.5rem; }

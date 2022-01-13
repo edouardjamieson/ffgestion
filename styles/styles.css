@@ -4432,10 +4432,13 @@ nav.main-header_navigation a {
   cursor: grab;
 }
 .single-project_kanban.moving-task .single-project_kanban-row {
-  pointer-events: all;
+  pointer-events: none;
 }
 .single-project_kanban.moving-task .single-project_kanban-row * {
   pointer-events: none;
+}
+.single-project_kanban.moving-task .single-project_kanban-row .single-project_kanban-dropzone {
+  pointer-events: all;
 }
 .single-project_kanban-row.row-active {
   border: 5px solid #f77777;
@@ -4465,11 +4468,27 @@ nav.main-header_navigation a {
   max-height: 600px;
   overflow: scroll;
 }
+.single-project_kanban-dropzone {
+  width: 100%;
+  height: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.single-project_kanban-dropzone.active {
+  height: 2rem;
+}
+.single-project_kanban-dropzone.active::after {
+  content: "";
+  width: 90%;
+  height: 2px;
+  display: block;
+  background-color: #d4d4d4;
+}
 .single-project_kanban-row_task {
   width: 100%;
   background-color: #fff;
   padding: 0.5rem;
-  margin-bottom: 1rem;
 }
 .single-project_kanban-row_task p {
   font-size: 1rem;

@@ -4521,6 +4521,24 @@ nav.main-header_navigation a {
 #single-project_new-form textarea {
   height: 300px;
 }
+.single-project_task-modal {
+  display: flex;
+  flex-direction: column;
+}
+.single-project_task-modal .single-project_task-modal_link {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+  background-color: #ebebeb;
+  color: #f77777;
+  padding: 1rem;
+  font-family: 'Roboto Slab', serif;
+}
+.single-project_task-modal .single-project_task-modal_link span {
+  margin-left: 0.5rem;
+}
 /***
  *     ######     ###    ##       ######## ##    ## ########     ###    ########  
  *    ##    ##   ## ##   ##       ##       ###   ## ##     ##   ## ##   ##     ## 

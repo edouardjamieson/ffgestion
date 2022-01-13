@@ -63,9 +63,10 @@ export default function SingleProject(project) {
     const [newTaskContent, setNewTaskContent] = useState("")
     const [newTaskFile, setNewTaskFile] = useState(null)
     const [newTaskFileName, setNewTaskFileName] = useState("Lier un fichier à la tâche")
+    const [taskData, setTaskData] = useState([])
 
     // STATES POUR LE MODAL
-    const [modalScreen, setModalScreen] = useState("column")
+    const [modalScreen, setModalScreen] = useState("add-column")
     const [modalVisible, setModalVisible] = useState(false)
     const [modalError, setModalError] = useState("")
 
@@ -308,11 +309,16 @@ export default function SingleProject(project) {
                 <KanbanBody
                     kanban={kanban}
                     onNewColumn={() => {
-                        setModalScreen("column")
+                        setModalScreen("add-column")
                         setModalVisible(true)
                     }}
                     onAddTask={column_id => {
                         setNewTaskColumnID(column_id)
+                        setModalScreen("add-task")
+                        setModalVisible(true)
+                    }}
+                    onClickTask={task => {
+                        setTaskData(task)
                         setModalScreen("task")
                         setModalVisible(true)
                     }}
@@ -349,22 +355,24 @@ export default function SingleProject(project) {
                 modalVisible ?
                 <Modal
                     title={
-                        modalScreen === "column" ?
+                        modalScreen === "add-column" ?
                         "Ajouter une colonne" :
+                        modalScreen === "add-task" ?
+                        "Ajouter une tâche" :
                         modalScreen === "task" ?
-                        "Ajouter une tâche" : null
+                        "Tâche" : null
                     }
                     onExit={() => setModalVisible(false)}
                 >
 
                     {
-                        modalScreen === "column" ?
+                        modalScreen === "add-column" ?
                         <form onSubmit={e => handleCreateColumn(e)} id="single-project_new-form">
                             <input type="text" placeholder="Nom de la nouvelle colonne" value={newColumnName} onChange={e => setNewColumnName(e.target.value)} />
                             <Cta type="submit" text="Ajouter" />
                         </form>
                         :
-                        modalScreen === "task" ?
+                        modalScreen === "add-task" ?
                         <form onSubmit={e => handleCreateTask(e)} id="single-project_new-form">
                             <textarea value={newTaskContent} onChange={e => setNewTaskContent(e.target.value)} placeholder="Contenu de la nouvelle tâche"></textarea>
                             <input onChange={e => handleUploadTaskFile(e.target.files[0])} type="file" id="new-task-file" />
@@ -373,6 +381,21 @@ export default function SingleProject(project) {
                             </label>
                             <Cta type="submit" text="Ajouter" />
                         </form>
+                        :
+                        modalScreen === "task" ?
+                        <>
+                            <div className="single-project_task-modal">
+                                <p>{ taskData.data.content }</p>
+                                {
+                                    taskData.data.file ?
+                                    <a className="single-project_task-modal_link" target="_blank" href={taskData.data.file}>
+                                        <i className="fas fa-paperclip"></i>
+                                        <span>Voir le fichier lié</span>
+                                    </a>
+                                    : null
+                                }
+                            </div>
+                        </>
                         : null
                     }
 

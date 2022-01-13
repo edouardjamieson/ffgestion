@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getTasksByID } from "../../functions/database/projects";
 import KanbanTask from "./KanbanTask";
 
-export default function KanbanColumn({ column, onAddTask }) {
+export default function KanbanColumn({ column, onAddTask, onClickTask }) {
 
     // console.log(column);
 
@@ -36,7 +36,13 @@ export default function KanbanColumn({ column, onAddTask }) {
             <div className="single-project_kanban-row_tasks">
                 {
                     tasks.length > 0 ?
-                    tasks.map(task => <KanbanTask task={task} key={task.id} column_id={column.id} />)
+                    tasks.map(task => 
+                    <KanbanTask
+                        task={task}
+                        key={task.id}
+                        column_id={column.id}
+                        onClickTask={task => onClickTask(task)}
+                    />)
                     :
                     <p>Aucune tâche dans cette colonne!</p>
                 }

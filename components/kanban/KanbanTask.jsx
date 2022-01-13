@@ -2,7 +2,7 @@ import moment from "moment";
 import { useEffect } from "react";
 import { moveKanbanTask } from "../../functions/database/projects";
 
-export default function KanbanTask({ task, column_id }) {
+export default function KanbanTask({ task, column_id, onClickTask }) {
 
     useEffect(() => {
     
@@ -86,7 +86,7 @@ export default function KanbanTask({ task, column_id }) {
     }
 
     return (
-        <div className="single-project_kanban-row_task" id={`kanban-task_${task.id}`} onClick={() => console.log("xd")}>
+        <div className="single-project_kanban-row_task" id={`kanban-task_${task.id}`} onClick={() => onClickTask(task)}>
             <p>{ task.data.content }</p>
             <div className="single-project_kanban-row_task-footer">
                 <span>Ajouté le { moment(task.data.created_at).format('D/MM/YYYY') }</span>

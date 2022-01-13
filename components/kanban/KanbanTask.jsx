@@ -53,11 +53,11 @@ export default function KanbanTask({ task, column_id, onClickTask }) {
         if(!kanban.classList.contains('moving-task')) return
 
 
+        console.log(e.target);
         if(e.target.hasAttribute('data-column-id')) {
             moveKanbanTask(
                 document.querySelector('.single-project').getAttribute('data-project-id'),
                 kanban.getAttribute('data-moving'),
-                column_id,
                 e.target.getAttribute('data-column-id')
             )
         }

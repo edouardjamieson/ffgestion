@@ -175,7 +175,11 @@ export async function getTasksByID(ids) {
  * @param new_column_id "ID de la nouvelle colonne"
  * @returns "Retourne true"
  */
-export async function moveKanbanTask(project_id, task_id, old_column_id, new_column_id) {
+export async function moveKanbanTask(project_id, task_id, new_column_id) {
+
+    // Récupère la colonne qui contient la tâche
+    const old_column_query = await db.collection('projects').doc(project_id).collection('columns').where('tasks', 'array-contains', task_id).get()
+    const old_column_id = old_column_query.docs[0].id
 
     // On enlève la tâche de cette colonne
     const task_query = await db.collection('projects').doc(project_id).collection('columns').doc(old_column_id).update({

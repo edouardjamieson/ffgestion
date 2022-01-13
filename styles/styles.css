@@ -4434,7 +4434,7 @@ nav.main-header_navigation a {
 .single-project_kanban.moving-task .single-project_kanban-row {
   pointer-events: all;
 }
-.single-project_kanban.moving-task .single-project_kanban-row > * {
+.single-project_kanban.moving-task .single-project_kanban-row * {
   pointer-events: none;
 }
 .single-project_kanban-row_head {

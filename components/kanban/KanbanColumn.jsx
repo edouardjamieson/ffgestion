@@ -4,6 +4,8 @@ import KanbanTask from "./KanbanTask";
 
 export default function KanbanColumn({ column, onAddTask }) {
 
+    // console.log(column);
+
     const [tasks, setTasks] = useState([])
 
     useEffect(() => {
@@ -12,9 +14,10 @@ export default function KanbanColumn({ column, onAddTask }) {
             getTasksByID(column.data.tasks)
             .then(docs => {
                 const ordered = docs.sort((a,b) => b.data.created_at - a.data.created_at)
-                console.log(ordered);
                 setTasks(ordered)
             })
+        }else{
+            setTasks([])
         }
         
     }, [column])
@@ -32,7 +35,10 @@ export default function KanbanColumn({ column, onAddTask }) {
 
             <div className="single-project_kanban-row_tasks">
                 {
-                    tasks.map(task => <KanbanTask task={task} key={task.id} />)
+                    tasks.length > 0 ?
+                    tasks.map(task => <KanbanTask task={task} key={task.id} column_id={column.id} />)
+                    :
+                    <p>Aucune tâche dans cette colonne!</p>
                 }
             </div>       
         </div> 

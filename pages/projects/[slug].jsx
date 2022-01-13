@@ -114,6 +114,7 @@ export default function SingleProject(project) {
             // Update le state du kanban
             const kanban = parseFirebaseDocs(snap.docs)
             setKanban(kanban)
+            // console.log(kanban);
 
         })
 

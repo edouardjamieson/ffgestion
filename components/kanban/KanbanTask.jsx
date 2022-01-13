@@ -52,8 +52,7 @@ export default function KanbanTask({ task, column_id, onClickTask }) {
         // Si on est pas en train de bouger on cancel
         if(!kanban.classList.contains('moving-task')) return
 
-
-        console.log(e.target);
+        // Si on est sur un colonne on call la function pour changer la tâche de colonne
         if(e.target.hasAttribute('data-column-id')) {
             moveKanbanTask(
                 document.querySelector('.single-project').getAttribute('data-project-id'),
@@ -68,6 +67,9 @@ export default function KanbanTask({ task, column_id, onClickTask }) {
         // On enlève les infos de mouvement
         kanban.classList.remove('moving-task')
         kanban.removeAttribute('data-moving')
+        if(document.querySelector('.single-project_kanban-row.row-active')) {
+            document.querySelector('.single-project_kanban-row.row-active').classList.remove('row-active')
+        }
     }
 
     const handleMoveDrag = (e) => {
@@ -81,6 +83,18 @@ export default function KanbanTask({ task, column_id, onClickTask }) {
         if(kanban.classList.contains('moving-task')) {
             ghost.style.top = e.clientY + window.scrollY - ghost.clientHeight + "px"
             ghost.style.left = e.clientX + "px"
+
+            // Permet d'indiquer la colonne sur laquelle on va drop
+            if(e.target.classList.contains('single-project_kanban-row')) {
+                if(document.querySelector('.single-project_kanban-row.row-active')) {
+                    document.querySelector('.single-project_kanban-row.row-active').classList.remove('row-active')
+                }
+                e.target.classList.add('row-active')
+            }else{
+                if(document.querySelector('.single-project_kanban-row.row-active')) {
+                    document.querySelector('.single-project_kanban-row.row-active').classList.remove('row-active')
+                }
+            }
         }
 
     }

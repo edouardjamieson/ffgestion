@@ -181,6 +181,8 @@ export async function moveKanbanTask(project_id, task_id, new_column_id) {
     const old_column_query = await db.collection('projects').doc(project_id).collection('columns').where('tasks', 'array-contains', task_id).get()
     const old_column_id = old_column_query.docs[0].id
 
+    if(old_column_id === new_column_id) return true
+
     // On enlève la tâche de cette colonne
     const task_query = await db.collection('projects').doc(project_id).collection('columns').doc(old_column_id).update({
         tasks: fields.arrayRemove(task_id)

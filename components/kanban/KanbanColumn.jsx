@@ -50,6 +50,7 @@ export default function KanbanColumn({ column, onAddTask, onClickTask }) {
                     :
                     <p>Aucune tâche dans cette colonne!</p>
                 }
+                <div className="single-project_kanban-dropzone" data-position={tasks.length}></div>
             </div>       
         </div> 
     )

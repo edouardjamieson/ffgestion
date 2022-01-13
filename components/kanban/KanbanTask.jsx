@@ -106,7 +106,7 @@ export default function KanbanTask({ task, i, column_id, onClickTask }) {
 
     return (
         <>
-            <div className="single-project_kanban-dropzone" data-task={task.id} data-position={i}></div>
+            <div className="single-project_kanban-dropzone" data-position={i}></div>
             <div className="single-project_kanban-row_task" id={`kanban-task_${task.id}`} onClick={() => onClickTask(task)}>
                 <p>{ task.data.content }</p>
                 <div className="single-project_kanban-row_task-footer">

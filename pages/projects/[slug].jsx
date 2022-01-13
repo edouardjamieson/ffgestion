@@ -388,7 +388,7 @@ export default function SingleProject(project) {
                                 <p>{ taskData.data.content }</p>
                                 {
                                     taskData.data.file ?
-                                    <a className="single-project_task-modal_link" target="_blank" href={taskData.data.file}>
+                                    <a className="single-project_task-modal_link" rel="noreferrer" target="_blank" href={taskData.data.file}>
                                         <i className="fas fa-paperclip"></i>
                                         <span>Voir le fichier lié</span>
                                     </a>

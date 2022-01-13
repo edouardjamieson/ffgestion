@@ -164,3 +164,33 @@ export async function getTasksByID(ids) {
     return parseFirebaseDocs(query.docs)
 
 }
+
+// ====================================================================
+// Bouge une tâche kanban
+// ====================================================================
+/**
+ * Permet de récupèrer des tâches
+ * @param project_id "ID du projet contenant la tâche"
+ * @param task_id "ID de la tâche à bouger"
+ * @param new_column_id "ID de la nouvelle colonne"
+ * @returns "Retourne true"
+ */
+export async function moveKanbanTask(project_id, task_id, new_column_id) {
+
+    // Récupère la colonne qui contient la tâche
+    const old_column_query = await db.collection('projects').doc(project_id).collection('columns').where('tasks', 'array-contains', task_id).get()
+    const old_column_id = old_column_query.docs[0].id
+
+    // On enlève la tâche de cette colonne
+    const task_query = await db.collection('projects').doc(project_id).collection('columns').doc(old_column_id).update({
+        tasks: fields.arrayRemove(task_id)
+    })
+
+    // On ajoute la tâche à la nouvelle colonne
+    const new_column_query = await db.collection('projects').doc(project_id).collection('columns').doc(new_column_id).update({
+        tasks: fields.arrayUnion(task_id)
+    })
+
+    return true
+
+}

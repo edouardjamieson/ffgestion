@@ -4394,6 +4394,7 @@ nav.main-header_navigation a {
 .single-project_kanban {
   width: 100%;
   margin-bottom: 2rem;
+  position: initial;
 }
 .single-project_kanban-head {
   width: 100%;
@@ -4420,6 +4421,21 @@ nav.main-header_navigation a {
   justify-content: center;
   padding: 5rem 1rem;
   background-color: #ebebeb;
+}
+.single-project_kanban.moving-task {
+  user-select: none;
+  cursor: grab;
+  pointer-events: none;
+}
+.single-project_kanban.moving-task .ghost {
+  display: block;
+  cursor: grab;
+}
+.single-project_kanban.moving-task .single-project_kanban-row {
+  pointer-events: all;
+}
+.single-project_kanban.moving-task .single-project_kanban-row > * {
+  pointer-events: none;
 }
 .single-project_kanban-row_head {
   display: flex;
@@ -4475,6 +4491,13 @@ nav.main-header_navigation a {
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 5;
+  transform: translate(-102%, -150%);
+  display: none;
+  pointer-events: none;
+}
+.single-project_kanban-row_task.moving {
+  opacity: 0.2;
 }
 #single-project_new-form {
   display: flex;

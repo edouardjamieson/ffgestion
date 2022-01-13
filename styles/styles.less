@@ -299,11 +299,17 @@ nav.main-header_navigation {
 }
 
 // KANBAN
-.single-project_kanban { width: 100%; margin-bottom: 2rem;
+.single-project_kanban { width: 100%; margin-bottom: 2rem; position: initial;
   &-head { width: 100%; display: flex; align-items: center; justify-content: space-between; }
   &-rows { display: flex; margin-top: 1rem; gap: 1rem; align-items: flex-start; }
   &-row { width: 100%; background: @color_lightgray; padding: 1rem; border-top: 5px solid @color_red; }
   &-empty { width: 100%; display: flex; align-items: center; justify-content: center; padding: 5rem 1rem; background-color: @color_lightgray; }
+
+  &.moving-task { user-select: none; cursor: grab; pointer-events: none;
+    .ghost { display: block; cursor: grab; }
+    .single-project_kanban-row { pointer-events: all; }
+    .single-project_kanban-row > * { pointer-events: none; }
+  }
 }
 .single-project_kanban-row_head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;
   span { font-family: @font_emphasis; font-size: 1.2rem; }
@@ -317,7 +323,8 @@ nav.main-header_navigation {
   &-icon { font-size: 1rem; color: @color_red; margin-left: 0.5rem; }
   span { .g-bold; font-size: 0.8rem; color: @color_gray; margin-right: auto; }
 
-  &.ghost { position: absolute; top: 0; left: 0; }
+  &.ghost { position: absolute; top: 0; left: 0; z-index: 5; transform: translate(-102%, -150%); display: none; pointer-events: none; }
+  &.moving { opacity: 0.2; }
 }
 
 #single-project_new-form { display: flex; flex-direction: column;
@@ -326,6 +333,7 @@ nav.main-header_navigation {
   .single-project_new-form_label { width: 100%; padding: 1rem; border: 3px dashed @color_red; text-align: center; margin-top: 1rem; cursor: pointer; }
   textarea { height: 300px; }
 }
+
 
 /***
  *     ######     ###    ##       ######## ##    ## ########     ###    ########  

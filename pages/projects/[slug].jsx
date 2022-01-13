@@ -286,7 +286,7 @@ export default function SingleProject(project) {
             isValidating={validating}
         >
 
-            <div className="single-project">
+            <div className="single-project" data-project-id={project.id}>
 
                 
 

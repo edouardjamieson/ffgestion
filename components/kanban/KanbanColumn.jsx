@@ -21,7 +21,7 @@ export default function KanbanColumn({ column, onAddTask }) {
 
     return (
 
-        <div className="single-project_kanban-row">
+        <div className="single-project_kanban-row" data-column-id={column.id}>
             <div className="single-project_kanban-row_head">
                 <span>{ column.data.name }</span>
                 <button type="button" onClick={() => onAddTask(column.id)}>

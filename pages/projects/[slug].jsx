@@ -9,7 +9,8 @@ import { db } from "../../functions/firebase"
 import { parseFirebaseDocs } from "../../functions/utils/dataparser"
 import Error from "../../components/Error"
 import { sanitizeFileName, slugify } from "../../functions/utils/string"
-import { addKanbanColumn, addKanbanTask, editProject, getTasksByID } from "../../functions/database/projects"
+import { editProject } from "../../functions/database/projects"
+import { addKanbanColumn, addKanbanTask, moveKanbanColumn } from '../../functions/database/kanban'
 import { useRouter } from "next/router"
 import { getAuthID, getUserByID } from "../../functions/database/users"
 import KanbanBody from "../../components/kanban/KanbanBody"
@@ -208,7 +209,9 @@ export default function SingleProject(project) {
             return setModalError("Veuillez entrer un nom pour la colonne.")
         }
 
-        addKanbanColumn(project.id, newColumnName)
+        const position = kanbanColumns.length + 1
+
+        addKanbanColumn(project.id, newColumnName, position)
         .then(() => {
             setValidating(false)
             setModalVisible(false)
@@ -352,6 +355,9 @@ export default function SingleProject(project) {
                         setNewTaskColumnID(column_id)
                         setModalScreen("add-task")
                         setModalVisible(true)
+                    }}
+                    onMoveColumn={(direction, currentIndex, column_id) => {
+                        moveKanbanColumn(project.id, column_id, currentIndex, direction)
                     }}
                 />
 

@@ -4595,7 +4595,6 @@ nav.main-header_navigation a {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   margin-bottom: 1rem;
 }
 .kanban-column_head button {
@@ -4605,6 +4604,17 @@ nav.main-header_navigation a {
   color: #f77777;
   font-size: 1.2rem;
   cursor: pointer;
+}
+.kanban-column_head button:disabled {
+  opacity: 0.3;
+}
+.kanban-column_head-move {
+  margin-left: auto;
+  margin-right: 1rem;
+  opacity: 0;
+}
+.kanban-column_head:hover .kanban-column_head-move {
+  opacity: 1;
 }
 .kanban-card {
   background-color: #fff;

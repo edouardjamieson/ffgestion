@@ -364,8 +364,15 @@ nav.main-header_navigation {
 .kanban-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
 .kanban-container { display: flex; gap: 1rem; align-items: flex-start; }
 .kanban-column { width: 100%; background-color: @color_lightgray; padding: 1rem;
-  &_head { width: 100%; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;
-    button { border: none; background-color: transparent; padding: 0; color: @color_red; font-size: 1.2rem; cursor: pointer; }
+  &_head { width: 100%; display: flex; align-items: center; margin-bottom: 1rem;
+    button { border: none; background-color: transparent; padding: 0; color: @color_red; font-size: 1.2rem; cursor: pointer;
+      &:disabled { opacity: 0.3; }
+    }
+    &-move { margin-left: auto; margin-right: 1rem; opacity: 0; }
+
+    &:hover {
+      .kanban-column_head-move { opacity: 1; }
+    }
   }
 
 }

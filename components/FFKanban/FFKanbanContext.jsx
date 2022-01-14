@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
-import { getTasksByID, lockKanbanTask, moveKanbanTask } from "../../functions/database/projects"
+import { getTasksByID, moveKanbanTask } from "../../functions/database/kanban"
 import { getAuthID } from "../../functions/database/users"
 import Cta from "../Cta"
 import Loader from "../Loader"
 
-export default function FFKanbanContext({ columns, project, onAddColumn, onAddTask }) {
+export default function FFKanbanContext({ columns, project, onAddColumn, onMoveColumn, onAddTask }) {
 
     const [loading, setLoading] = useState(true)
     const [kanbanColumns, setKanbanColumns] = useState(columns)
@@ -58,13 +58,21 @@ export default function FFKanbanContext({ columns, project, onAddColumn, onAddTa
         moveKanbanTask(project, draggableId, source.droppableId, destination.droppableId, destination.index, getAuthID())
     }
 
-    const FFKanbanColumn = ({ column }) => {
+    const FFKanbanColumn = ({ column, index }) => {
 
         return (
             <div className="kanban-column">
 
                 <div className="kanban-column_head">
                     <h4>{ column.data.name }</h4>
+                    <div className="kanban-column_head-move">
+                        <button type="button" onClick={() => onMoveColumn(-1, index, column.id)} disabled={ index === 0 ? "disabled" : "" }>
+                            <i className="fas fa-caret-left"></i>
+                        </button>
+                        <button type="button" onClick={() => onMoveColumn(1, index, column.id)} disabled={ index === kanbanColumns.length-1 ? "disabled" : "" }>
+                            <i className="fas fa-caret-right"></i>
+                        </button>
+                    </div>
                     <button type="button" onClick={() => onAddTask(column.id)}>
                         <i className="fas fa-add"></i>
                     </button>
@@ -144,7 +152,9 @@ export default function FFKanbanContext({ columns, project, onAddColumn, onAddTa
 
                         {/* COLONNES */}
                         {
-                            kanbanColumns.map(col => <FFKanbanColumn column={col} key={col.id} />)
+                            kanbanColumns
+                            .sort((a,b) => a.data.order > b.data.order ? 1 : -1)
+                            .map((col, index) => <FFKanbanColumn column={col} key={col.id} index={index} />)
                         }
 
 

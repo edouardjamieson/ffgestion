@@ -160,8 +160,27 @@ export async function addKanbanTask(project_id, column_id, data) {
  */
 export async function getTasksByID(ids) {
 
+    if(ids.length < 1) return []
+
     const query = await db.collection('kanban').where('__name__', 'in', ids).get()
     return parseFirebaseDocs(query.docs)
+
+}
+
+// ====================================================================
+// Lock un tâche kanban
+// ====================================================================
+/**
+ * Permet de lock une tâche
+ * @param project_id "ID du projet contenant la tâche"
+ * @param task_id "ID de la tâche à lock"
+ * @returns "Retourne true"
+ */
+export async function lockKanbanTask(project_id, task_id) {
+
+    const query = await db.collection('projects').doc(project_id).update({
+        lockedTasks: fields.arrayUnion(`${task_id}|${getAuthID()}`)
+    })
 
 }
 
@@ -177,16 +196,6 @@ export async function getTasksByID(ids) {
  */
 export async function moveKanbanTask(project_id, task_id, old_column_id, new_column_id, position, editedBy) {
 
-    // On dit au projet l'utilisateur qui a fait le changement
-    const project_query = await db.collection('projects').doc(project_id).update({
-        kanbanLastEditedBy: editedBy
-    })
-    
-    // On enlève la tâche de la colonne courante
-    const task_query = await db.collection('projects').doc(project_id).collection('columns').doc(old_column_id).update({
-        tasks: fields.arrayRemove(task_id)
-    })
-
     // On récupère les tâches de la nouvelles colonnes
     const new_column_tasks_query = await db.collection('projects').doc(project_id).collection('columns').doc(new_column_id).get()
     const new_column_tasks = parseFirebaseDoc(new_column_tasks_query).data.tasks
@@ -194,10 +203,20 @@ export async function moveKanbanTask(project_id, task_id, old_column_id, new_col
     // On insert l'id de la tâche à sa nouvelle position
     new_column_tasks.splice(position, 0, task_id)
     
-    // On update les tâches de la colonne
-    const update_tasks_query = await db.collection('projects').doc(project_id).collection('columns').doc(new_column_id).update({
+    // Une batch est une série d'action (sauf read) que l'on veut faire en même temps
+    const batch = db.batch()
+
+    // On ajoute l'update pour ajouter la tâche
+    batch.update(db.collection('projects').doc(project_id).collection('columns').doc(new_column_id), {
         tasks: new_column_tasks
     })
+    // On ajoute l'update pour supprimer la tâche de l'ancienne colonne
+    batch.update(db.collection('projects').doc(project_id).collection('columns').doc(old_column_id), {
+        tasks: fields.arrayRemove(task_id)
+    })
+
+    // On envoit la batch
+    await batch.commit()
 
     return true
 }

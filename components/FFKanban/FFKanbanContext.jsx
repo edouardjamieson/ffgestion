@@ -1,27 +1,34 @@
 import { useState, useEffect } from "react"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
-import { moveKanbanTask } from "../../functions/database/projects"
+import { getTasksByID, lockKanbanTask, moveKanbanTask } from "../../functions/database/projects"
 import { getAuthID } from "../../functions/database/users"
+import Cta from "../Cta"
 import Loader from "../Loader"
 
-export default function FFKanbanContext({ columns, tasks, project, onEdit }) {
+export default function FFKanbanContext({ columns, project, onAddColumn, onAddTask }) {
 
     const [loading, setLoading] = useState(true)
     const [kanbanColumns, setKanbanColumns] = useState(columns)
-    const [kanbanTasks, setKanbanTasks] = useState(tasks)
+    const [kanbanTasks, setKanbanTasks] = useState([])
 
     useEffect(() => {
-        if(tasks.length > 0 && columns.length > 0) {
-            setKanbanTasks(tasks)
-            setKanbanColumns(columns)
-            setLoading(false)
+        if(columns.length > 0) {
+
+            // On récupère les ids des tâches dans les colonnes
+            let kanban_tasks = columns.map(column => column.data.tasks)
+            kanban_tasks = [].concat.apply([], kanban_tasks)
+
+            getTasksByID(kanban_tasks)
+            .then(tasks => {
+                setKanbanColumns(columns)
+                setKanbanTasks(tasks)
+                setLoading(false)
+            })            
         }
-    }, [tasks])
+    }, [columns])
 
     const handleKanbanDragEnd = (result) => {
         const { source, destination, draggableId } = result
-
-        // onEdit()
 
         if(!destination) return
         if(destination.droppableId === source.droppableId && destination.index === source.index) return
@@ -52,37 +59,50 @@ export default function FFKanbanContext({ columns, tasks, project, onEdit }) {
     }
 
     const FFKanbanColumn = ({ column }) => {
+
         return (
-            // Droppable indique à DND qu'on veut créer une zone droppable
-            // Il nous retourne une colonne qu'on peut construire
-            <Droppable droppableId={column.id}>
-                {
-                    provided => 
-                    <div
-                        className="kanban-column"
-                        ref={provided.innerRef}
-                        { ...provided.droppableProps }
-                    >
+            <div className="kanban-column">
 
-                        <h4>{ column.data.name }</h4>
+                <div className="kanban-column_head">
+                    <h4>{ column.data.name }</h4>
+                    <button type="button" onClick={() => onAddTask(column.id)}>
+                        <i className="fas fa-add"></i>
+                    </button>
+                </div>
 
-                        {/* On map au travers des tâches */}
-                        {
-                            column.data.tasks.map((task, index) =>
-                                <FFKanbanCard key={task} task_id={task} index={index} />
-                            )
-                        }
+                {/* Droppable indique à DND qu'on veut créer une zone droppable */}
+                {/* Il nous retourne une colonne qu'on peut construire */}
+                <Droppable droppableId={column.id}>
+                    {
+                        provided =>
+                        <div
+                            className="kanban-column_dropzone"
+                            ref={provided.innerRef}
+                            { ...provided.droppableProps }
+                        >
 
-                        { provided.placeholder }
-                    </div>
-                }
-            </Droppable>
+                            {/* On map au travers des tâches */}
+                            {
+                                column.data.tasks.map((task, index) =>
+                                    <FFKanbanCard key={task} task_id={task} index={index} />
+                                )
+                            }
+
+                            { provided.placeholder }
+
+                        </div>
+                    }
+                </Droppable>
+
+            </div>
         )
+
     }
 
     const FFKanbanCard = ({ task_id, index }) => {
 
         const task = kanbanTasks.filter(t => t.id === task_id)[0] 
+        if(!task) return null
 
         return (
             <Draggable draggableId={task_id} index={index}>
@@ -94,6 +114,7 @@ export default function FFKanbanContext({ columns, tasks, project, onEdit }) {
                         ref={provided.innerRef}
                         { ...provided.draggableProps }
                         { ...provided.dragHandleProps }
+                        onClick={() => console.log("xd")}
                     >
                         { task.data.content }
                     </div>
@@ -110,17 +131,32 @@ export default function FFKanbanContext({ columns, tasks, project, onEdit }) {
 
         <div className="kanban">
 
-            {/* MAIN CONTAINER */}
-            <DragDropContext onDragEnd={handleKanbanDragEnd}>
+            <div className="kanban-head">
+                <h3>Liste des tâches</h3>
+                <Cta type="button" text="Ajouter une colonne" onClick={() => onAddColumn()} />
+            </div>
 
-                {/* COLONNES */}
-                {
-                    kanbanColumns.map(col => <FFKanbanColumn column={col} key={col.id} />)
-                }
+            {
+                kanbanColumns.length > 0 ?
+                // MAIN CONTAINER
+                <div className="kanban-container">
+                    <DragDropContext onDragEnd={handleKanbanDragEnd}>
+
+                        {/* COLONNES */}
+                        {
+                            kanbanColumns.map(col => <FFKanbanColumn column={col} key={col.id} />)
+                        }
 
 
 
-            </DragDropContext>
+                    </DragDropContext>
+                </div>
+                :
+                <div className="kanban-empty">
+                    Vous n'avez pas encore créé de colonne pour ce tableau!
+                </div>
+            }
+
         </div>
 
     )

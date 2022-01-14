@@ -78,6 +78,7 @@ export default function SingleProject(project) {
 
     let refreshKanban = ""
     let firstLoad = true
+    const [lockedCards, setLockedCards] = useState(project.data.lockedTasks)
 
     useEffect(() => {
 
@@ -89,6 +90,7 @@ export default function SingleProject(project) {
             // ====================================================================
 
             refreshKanban = snap.data().kanbanLastEditedBy
+            // setLockedCards(snap.data().lockedTasks)
 
             // Update le contenu de l'éditeur
             setEditorContent(snap.data().tasks)
@@ -119,28 +121,18 @@ export default function SingleProject(project) {
             
             // Update le state du kanban
             const kanban = parseFirebaseDocs(snap.docs)
-            let kanban_tasks = kanban.map(column => column.data.tasks)
-            kanban_tasks = [].concat.apply([], kanban_tasks)
-            
-            if(firstLoad === true) {
-                getTasksByID(kanban_tasks)
-                .then(tasks => {
-                    setKanbanColumns(kanban)
-                    setKanbanTasks(tasks)
-                    firstLoad = false
-                })
-            }
-
-            if(refreshKanban !== getAuthID() && firstLoad !== true) {
-                console.log("xd");
-                getTasksByID(kanban_tasks)
-                .then(tasks => {
-                    setKanbanColumns(kanban)
-                    setKanbanTasks(tasks)
-                })
-            }
-            
-
+            setKanbanColumns(kanban)
+            // // Si on est le first load 
+            // if(firstLoad === true) {
+            //     setKanbanColumns(kanban)
+            //     firstLoad = false
+            // }
+            // // Sinon on regarde si c'est nous qui avons fait le dernier changement
+            // else{
+            //     if(refreshKanban !== getAuthID()) {
+            //         setKanbanColumns(kanban)
+            //     }
+            // }
 
         })
 
@@ -351,8 +343,16 @@ export default function SingleProject(project) {
 
                 <FFKanbanContext
                     columns={kanbanColumns}
-                    tasks={kanbanTasks}
                     project={project.id}
+                    onAddColumn={() => {
+                        setModalScreen("add-column")
+                        setModalVisible(true)
+                    }}
+                    onAddTask={column_id => {
+                        setNewTaskColumnID(column_id)
+                        setModalScreen("add-task")
+                        setModalVisible(true)
+                    }}
                 />
 
                 <div className="single-project_tasks">

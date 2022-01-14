@@ -281,7 +281,7 @@ nav.main-header_navigation {
 // SINGLE D'UN PROJET
 // ====================================================================
 .single-project { width: 100%; display: flex; flex-direction: column; margin-top: 2rem; }
-.single-project_tasks { width: 60%;
+.single-project_tasks { width: 60%; display: none;
   &-container { width: 100%; }
   #single-project_tasks { width: 100%; height: 50vh; border: 1px solid @color_gray; }
   .single-project_tasks-editor { position: absolute; bottom: 1px; background-color: fade(@color_black, 20%); color: @color_black; padding: 1rem; width: 100%; }
@@ -360,13 +360,19 @@ nav.main-header_navigation {
 // ====================================================================
 // LE TABLEAU
 // ====================================================================
-.kanban { width: 100%; display: flex; gap: 1rem; margin-bottom: 2rem; align-items: flex-start; }
+.kanban { width: 100%; margin-bottom: 2rem; }
+.kanban-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.kanban-container { display: flex; gap: 1rem; align-items: flex-start; }
 .kanban-column { width: 100%; background-color: @color_lightgray; padding: 1rem;
-  h4 { margin-bottom: 1rem; }
+  &_head { width: 100%; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;
+    button { border: none; background-color: transparent; padding: 0; color: @color_red; font-size: 1.2rem; cursor: pointer; }
+  }
+
 }
 .kanban-card { background-color: @color_white; padding: 1rem; margin-bottom: 1rem;
   &.is-moving { box-shadow: 0 0 10px fade(@color_black, 20%); }
 }
+.kanban-empty { height: 200px; width: 100%; display: flex; align-items: center; justify-content: center; .g-bold; color: @color_gray; }
 
 
 /***

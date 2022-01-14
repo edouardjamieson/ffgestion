@@ -1,17 +1,27 @@
 import { useState, useEffect } from "react"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import { moveKanbanTask } from "../../functions/database/projects"
+import { getAuthID } from "../../functions/database/users"
+import Loader from "../Loader"
 
-export default function FFKanbanContext({ columns, tasks, project }) {
+export default function FFKanbanContext({ columns, tasks, project, onEdit }) {
 
+    const [loading, setLoading] = useState(true)
     const [kanbanColumns, setKanbanColumns] = useState(columns)
     const [kanbanTasks, setKanbanTasks] = useState(tasks)
 
-    if(columns.length < 1) return null
-    if(tasks.length < 1) return null
+    useEffect(() => {
+        if(tasks.length > 0 && columns.length > 0) {
+            setKanbanTasks(tasks)
+            setKanbanColumns(columns)
+            setLoading(false)
+        }
+    }, [tasks])
 
     const handleKanbanDragEnd = (result) => {
         const { source, destination, draggableId } = result
+
+        // onEdit()
 
         if(!destination) return
         if(destination.droppableId === source.droppableId && destination.index === source.index) return
@@ -38,7 +48,7 @@ export default function FFKanbanContext({ columns, tasks, project }) {
         }
 
         setKanbanColumns(cols)
-        moveKanbanTask(project, draggableId, source.droppableId, destination.droppableId, destination.index)
+        moveKanbanTask(project, draggableId, source.droppableId, destination.droppableId, destination.index, getAuthID())
     }
 
     const FFKanbanColumn = ({ column }) => {
@@ -95,6 +105,7 @@ export default function FFKanbanContext({ columns, tasks, project }) {
     }
 
 
+    if(loading) return <Loader />
     return (
 
         <div className="kanban">

@@ -66,7 +66,7 @@ export async function getProject(id) {
         created_at: Date.now(),
         tasks: "",
         occupiedBy: null,
-        kanban_columns: []
+        kanbanLastEditedBy: null
     }
 
     const query = await db.collection('projects').add(project)
@@ -175,8 +175,13 @@ export async function getTasksByID(ids) {
  * @param new_column_id "ID de la nouvelle colonne"
  * @returns "Retourne true"
  */
-export async function moveKanbanTask(project_id, task_id, old_column_id, new_column_id, position) {
+export async function moveKanbanTask(project_id, task_id, old_column_id, new_column_id, position, editedBy) {
 
+    // On dit au projet l'utilisateur qui a fait le changement
+    const project_query = await db.collection('projects').doc(project_id).update({
+        kanbanLastEditedBy: editedBy
+    })
+    
     // On enlève la tâche de la colonne courante
     const task_query = await db.collection('projects').doc(project_id).collection('columns').doc(old_column_id).update({
         tasks: fields.arrayRemove(task_id)

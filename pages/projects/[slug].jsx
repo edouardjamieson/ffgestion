@@ -60,6 +60,7 @@ export default function SingleProject(project) {
     // STATES POUR LE KANBAN
     const [kanbanColumns, setKanbanColumns] = useState([])
     const [kanbanTasks, setKanbanTasks] = useState([])
+    const [kanbanShouldRefreshDB, setKanbanShouldRefreshDB] = useState(true)
     const [newColumnName, setNewColumnName] = useState("")
     const [newTaskColumnID, setNewTaskColumnID] = useState("")
     const [newTaskContent, setNewTaskContent] = useState("")
@@ -75,7 +76,8 @@ export default function SingleProject(project) {
     const [error, setError] = useState("")
     const [validating, setValidating] = useState(false)
 
-
+    let refreshKanban = ""
+    let firstLoad = true
 
     useEffect(() => {
 
@@ -85,6 +87,8 @@ export default function SingleProject(project) {
             // ====================================================================
             // Ce code est appelé chaque fois qu'il y a un changement dans le projet
             // ====================================================================
+
+            refreshKanban = snap.data().kanbanLastEditedBy
 
             // Update le contenu de l'éditeur
             setEditorContent(snap.data().tasks)
@@ -104,7 +108,6 @@ export default function SingleProject(project) {
             if(snap.data().occupiedBy === getAuthID()) {
                 TextArea.current.focus()
             }
-
         })
 
         // On démarre un live session pour le kanban
@@ -113,17 +116,31 @@ export default function SingleProject(project) {
             // ====================================================================
             // Ce code est appelé chaque fois qu'il y a un changement dans le kanban
             // ====================================================================
-
+            
             // Update le state du kanban
             const kanban = parseFirebaseDocs(snap.docs)
             let kanban_tasks = kanban.map(column => column.data.tasks)
             kanban_tasks = [].concat.apply([], kanban_tasks)
             
-            getTasksByID(kanban_tasks)
-            .then(tasks => {
-                setKanbanColumns(kanban)
-                setKanbanTasks(tasks)
-            })
+            if(firstLoad === true) {
+                getTasksByID(kanban_tasks)
+                .then(tasks => {
+                    setKanbanColumns(kanban)
+                    setKanbanTasks(tasks)
+                    firstLoad = false
+                })
+            }
+
+            if(refreshKanban !== getAuthID() && firstLoad !== true) {
+                console.log("xd");
+                getTasksByID(kanban_tasks)
+                .then(tasks => {
+                    setKanbanColumns(kanban)
+                    setKanbanTasks(tasks)
+                })
+            }
+            
+
 
         })
 
@@ -332,7 +349,11 @@ export default function SingleProject(project) {
                     }}
                 /> */}
 
-                <FFKanbanContext columns={kanbanColumns} tasks={kanbanTasks} project={project.id} />
+                <FFKanbanContext
+                    columns={kanbanColumns}
+                    tasks={kanbanTasks}
+                    project={project.id}
+                />
 
                 <div className="single-project_tasks">
 

@@ -4620,9 +4620,21 @@ nav.main-header_navigation a {
   background-color: #fff;
   padding: 1rem;
   margin-bottom: 1rem;
+  cursor: pointer;
+}
+.kanban-card_grip {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 1.2rem;
+  color: #d4d4d4;
+  opacity: 0;
 }
 .kanban-card.is-moving {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.kanban-card:hover .kanban-card_grip {
+  opacity: 1;
 }
 .kanban-empty {
   height: 200px;

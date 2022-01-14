@@ -326,24 +326,6 @@ export default function SingleProject(project) {
 
                 </div>
 
-                {/* <KanbanBody
-                    kanban={kanban}
-                    onNewColumn={() => {
-                        setModalScreen("add-column")
-                        setModalVisible(true)
-                    }}
-                    onAddTask={column_id => {
-                        setNewTaskColumnID(column_id)
-                        setModalScreen("add-task")
-                        setModalVisible(true)
-                    }}
-                    onClickTask={task => {
-                        setTaskData(task)
-                        setModalScreen("task")
-                        setModalVisible(true)
-                    }}
-                /> */}
-
                 <FFKanbanContext
                     columns={kanbanColumns}
                     project={project.id}

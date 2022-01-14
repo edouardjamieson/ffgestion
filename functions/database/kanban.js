@@ -185,6 +185,4 @@ export async function moveKanbanColumn(project_id, column_id, position, directio
     await batch.commit()
     return true
 
-    // console.log(columns);
-
 }

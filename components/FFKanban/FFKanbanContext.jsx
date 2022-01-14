@@ -121,10 +121,14 @@ export default function FFKanbanContext({ columns, project, onAddColumn, onMoveC
                         className={snapshot.isDragging ? "kanban-card is-moving" : "kanban-card" }
                         ref={provided.innerRef}
                         { ...provided.draggableProps }
-                        { ...provided.dragHandleProps }
                         onClick={() => console.log("xd")}
                     >
-                        { task.data.content }
+                        <div className="kanban-card_grip" { ...provided.dragHandleProps }>
+                            <i className="fas fa-grip-horizontal"></i>
+                        </div>
+                        <p>
+                            { task.data.content }
+                        </p>
                     </div>
                 }
 

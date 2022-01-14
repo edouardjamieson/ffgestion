@@ -376,8 +376,13 @@ nav.main-header_navigation {
   }
 
 }
-.kanban-card { background-color: @color_white; padding: 1rem; margin-bottom: 1rem;
+.kanban-card { background-color: @color_white; padding: 1rem; margin-bottom: 1rem; cursor: pointer;
+  &_grip { position: absolute; top: 0.5rem; right: 0.5rem; font-size: 1.2rem; color: @color_gray; opacity: 0; }
   &.is-moving { box-shadow: 0 0 10px fade(@color_black, 20%); }
+
+  &:hover {
+    .kanban-card_grip { opacity: 1; }
+  }
 }
 .kanban-empty { height: 200px; width: 100%; display: flex; align-items: center; justify-content: center; .g-bold; color: @color_gray; }
 

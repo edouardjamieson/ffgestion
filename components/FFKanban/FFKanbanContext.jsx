@@ -4,11 +4,11 @@ import { moveKanbanTask } from "../../functions/database/projects"
 
 export default function FFKanbanContext({ columns, tasks, project }) {
 
-    if(columns.length < 1) return null
-    if(tasks.length < 1) return null
-
     const [kanbanColumns, setKanbanColumns] = useState(columns)
     const [kanbanTasks, setKanbanTasks] = useState(tasks)
+
+    if(columns.length < 1) return null
+    if(tasks.length < 1) return null
 
     const handleKanbanDragEnd = (result) => {
         const { source, destination, draggableId } = result

@@ -4562,6 +4562,38 @@ nav.main-header_navigation a {
   margin-left: 0.5rem;
 }
 /***
+ *    ##    ##    ###    ##    ## ########     ###    ##    ## 
+ *    ##   ##    ## ##   ###   ## ##     ##   ## ##   ###   ## 
+ *    ##  ##    ##   ##  ####  ## ##     ##  ##   ##  ####  ## 
+ *    #####    ##     ## ## ## ## ########  ##     ## ## ## ## 
+ *    ##  ##   ######### ##  #### ##     ## ######### ##  #### 
+ *    ##   ##  ##     ## ##   ### ##     ## ##     ## ##   ### 
+ *    ##    ## ##     ## ##    ## ########  ##     ## ##    ## 
+ */
+.kanban {
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  align-items: flex-start;
+}
+.kanban-column {
+  width: 100%;
+  background-color: #ebebeb;
+  padding: 1rem;
+}
+.kanban-column h4 {
+  margin-bottom: 1rem;
+}
+.kanban-card {
+  background-color: #fff;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+.kanban-card.is-moving {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+/***
  *     ######     ###    ##       ######## ##    ## ########     ###    ########  
  *    ##    ##   ## ##   ##       ##       ###   ## ##     ##   ## ##   ##     ## 
  *    ##        ##   ##  ##       ##       ####  ## ##     ##  ##   ##  ##     ## 

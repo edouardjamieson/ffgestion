@@ -9,11 +9,12 @@ import { db } from "../../functions/firebase"
 import { parseFirebaseDocs } from "../../functions/utils/dataparser"
 import Error from "../../components/Error"
 import { sanitizeFileName, slugify } from "../../functions/utils/string"
-import { addKanbanColumn, addKanbanTask, editProject } from "../../functions/database/projects"
+import { addKanbanColumn, addKanbanTask, editProject, getTasksByID } from "../../functions/database/projects"
 import { useRouter } from "next/router"
 import { getAuthID, getUserByID } from "../../functions/database/users"
 import KanbanBody from "../../components/kanban/KanbanBody"
 import Modal from "../../components/Modal"
+import FFKanbanContext from "../../components/FFKanban/FFKanbanContext"
 
 // Permet d'aller pre-fetch les informations d'un projet avant de construire la page
 export async function getServerSideProps(context) {
@@ -57,7 +58,8 @@ export default function SingleProject(project) {
     const TextArea = useRef(null)
     
     // STATES POUR LE KANBAN
-    const [kanban, setKanban] = useState([])
+    const [kanbanColumns, setKanbanColumns] = useState([])
+    const [kanbanTasks, setKanbanTasks] = useState([])
     const [newColumnName, setNewColumnName] = useState("")
     const [newTaskColumnID, setNewTaskColumnID] = useState("")
     const [newTaskContent, setNewTaskContent] = useState("")
@@ -114,8 +116,14 @@ export default function SingleProject(project) {
 
             // Update le state du kanban
             const kanban = parseFirebaseDocs(snap.docs)
-            setKanban(kanban)
-            // console.log(kanban);
+            let kanban_tasks = kanban.map(column => column.data.tasks)
+            kanban_tasks = [].concat.apply([], kanban_tasks)
+            
+            getTasksByID(kanban_tasks)
+            .then(tasks => {
+                setKanbanColumns(kanban)
+                setKanbanTasks(tasks)
+            })
 
         })
 
@@ -306,7 +314,7 @@ export default function SingleProject(project) {
 
                 </div>
 
-                <KanbanBody
+                {/* <KanbanBody
                     kanban={kanban}
                     onNewColumn={() => {
                         setModalScreen("add-column")
@@ -322,7 +330,9 @@ export default function SingleProject(project) {
                         setModalScreen("task")
                         setModalVisible(true)
                     }}
-                />
+                /> */}
+
+                <FFKanbanContext columns={kanbanColumns} tasks={kanbanTasks} project={project.id} />
 
                 <div className="single-project_tasks">
 

@@ -348,6 +348,26 @@ nav.main-header_navigation {
 
 }
 
+/***
+ *    ##    ##    ###    ##    ## ########     ###    ##    ## 
+ *    ##   ##    ## ##   ###   ## ##     ##   ## ##   ###   ## 
+ *    ##  ##    ##   ##  ####  ## ##     ##  ##   ##  ####  ## 
+ *    #####    ##     ## ## ## ## ########  ##     ## ## ## ## 
+ *    ##  ##   ######### ##  #### ##     ## ######### ##  #### 
+ *    ##   ##  ##     ## ##   ### ##     ## ##     ## ##   ### 
+ *    ##    ## ##     ## ##    ## ########  ##     ## ##    ## 
+ */
+// ====================================================================
+// LE TABLEAU
+// ====================================================================
+.kanban { width: 100%; display: flex; gap: 1rem; margin-bottom: 2rem; align-items: flex-start; }
+.kanban-column { width: 100%; background-color: @color_lightgray; padding: 1rem;
+  h4 { margin-bottom: 1rem; }
+}
+.kanban-card { background-color: @color_white; padding: 1rem; margin-bottom: 1rem;
+  &.is-moving { box-shadow: 0 0 10px fade(@color_black, 20%); }
+}
+
 
 /***
  *     ######     ###    ##       ######## ##    ## ########     ###    ########  
@@ -421,3 +441,4 @@ nav.main-header_navigation {
   select { margin-top: 1rem; }
   .cta { margin-top: 1rem; margin-left: auto; }
 }
+
